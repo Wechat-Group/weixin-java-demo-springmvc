@@ -1,4 +1,4 @@
-package cn.edu.bupt.service;
+package com.github.service;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;

@@ -1,4 +1,4 @@
-package cn.edu.bupt.controller;
+package com.github.controller;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;

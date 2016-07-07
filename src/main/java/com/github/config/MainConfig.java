@@ -1,4 +1,4 @@
-package cn.edu.bupt.config;
+package com.github.config;
 
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;

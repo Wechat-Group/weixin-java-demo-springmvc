@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!-- 扫描controller（controller层注入） -->
-    <context:component-scan base-package="cn.edu.bupt.controller"/>
+    <context:component-scan base-package="com.github.controller"/>
 
     <!-- 会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,是spring MVC为@Controllers分发请求所必须的 -->
     <mvc:annotation-driven/>

@@ -1,6 +1,6 @@
-package cn.edu.bupt.service.impl;
+package com.github.service.impl;
 
-import cn.edu.bupt.service.CoreService;
+import com.github.service.CoreService;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;

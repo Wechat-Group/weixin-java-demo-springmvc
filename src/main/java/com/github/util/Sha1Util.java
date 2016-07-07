@@ -1,4 +1,4 @@
-package cn.edu.bupt.util;
+package com.github.util;
 
 import java.security.MessageDigest;
 import java.util.*;

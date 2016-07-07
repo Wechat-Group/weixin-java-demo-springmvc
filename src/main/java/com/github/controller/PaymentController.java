@@ -1,8 +1,8 @@
-package cn.edu.bupt.controller;
+package com.github.controller;
 
-import cn.edu.bupt.util.MD5Util;
-import cn.edu.bupt.util.ReturnModel;
-import cn.edu.bupt.util.XMLUtil;
+import com.github.util.MD5Util;
+import com.github.util.ReturnModel;
+import com.github.util.XMLUtil;
 import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;

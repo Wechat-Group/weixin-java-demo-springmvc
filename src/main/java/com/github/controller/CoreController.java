@@ -1,7 +1,7 @@
-package cn.edu.bupt.controller;
+package com.github.controller;
 
-import cn.edu.bupt.service.CoreService;
-import cn.edu.bupt.util.ReturnModel;
+import com.github.service.CoreService;
+import com.github.util.ReturnModel;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;

@@ -1,4 +1,4 @@
-package cn.edu.bupt.util;
+package com.github.util;
 
 public class ReturnModel extends GenericReturnModel<Object> {
 

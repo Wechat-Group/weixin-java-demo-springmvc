@@ -1,4 +1,4 @@
-package cn.edu.bupt.config;
+package com.github.config;
 
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.WxMenu;
