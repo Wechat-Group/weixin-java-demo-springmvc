@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="szb_wx_Rebirth" />
+        <module name="weixin-java-tools-springmvc" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="szb_wx_Rebirth" target="1.8" />
+      <module name="weixin-java-tools-springmvc" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

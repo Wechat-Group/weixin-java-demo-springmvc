@@ -1,6 +1,16 @@
 package com.github.service.impl;
 
+import com.github.handler.LogHandler;
+import com.github.handler.MsgHandler;
+import com.github.handler.SubscribeHandler;
 import com.github.service.CoreService;
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -11,11 +21,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,12 +39,29 @@ import java.util.List;
 @Service
 public class CoreServiceImpl implements CoreService {
 
+    @Autowired
+    protected WxMpService wxMpService;
+    @Autowired
+    protected LogHandler logHandler;
+    @Autowired
+    protected SubscribeHandler subscribeHandler;
+    @Autowired
+    protected MsgHandler msgHandler;
+
+    private WxMpMessageRouter router;
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    @PostConstruct
+    public void init() {
+        this.refreshRouter();
+    }
 
     @Override
     public void requestGet(String urlWithParams) throws IOException {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         HttpGet httpget = new HttpGet(urlWithParams);
+        httpget.addHeader("Content-Type", "text/html;charset=UTF-8");
         //配置请求的超时设置
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectionRequestTimeout(50)
@@ -54,7 +84,7 @@ public class CoreServiceImpl implements CoreService {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 
         HttpPost httppost = new HttpPost(url);
-        httppost.setEntity(new UrlEncodedFormEntity(params));
+        httppost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 
         CloseableHttpResponse response = httpclient.execute(httppost);
         System.out.println(response.toString());
@@ -64,6 +94,42 @@ public class CoreServiceImpl implements CoreService {
         System.out.println(jsonStr);
 
         httppost.releaseConnection();
+    }
+
+    @Override
+    public void refreshRouter() {
+        final WxMpMessageRouter newRouter = new WxMpMessageRouter(wxMpService);
+        // 记录所有事件的日志
+        newRouter.rule().handler(this.logHandler).next();
+        // 关注事件
+        newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+                .event(WxConsts.EVT_SUBSCRIBE).handler(subscribeHandler)
+                .end();
+        // 默认
+        newRouter.rule().async(false).handler(msgHandler).end();
+        this.router = newRouter;
+    }
+
+    @Override
+    public WxMpXmlOutMessage route(WxMpXmlMessage inMessage) {
+        try {
+            return this.router.route(inMessage);
+        } catch (Exception e) {
+            this.logger.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public WxMpUser getUserInfo(String openid, String lang) {
+        WxMpUser wxMpUser = null;
+        try {
+            wxMpUser = wxMpService.userInfo(openid, lang);
+        } catch (WxErrorException e) {
+            logger.error(e.getError().toString());
+        }
+        return wxMpUser;
     }
 
 }

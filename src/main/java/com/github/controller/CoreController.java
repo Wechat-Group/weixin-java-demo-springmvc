@@ -2,21 +2,14 @@ package com.github.controller;
 
 import com.github.service.CoreService;
 import com.github.util.ReturnModel;
-import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.common.util.StringUtils;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpMessageHandler;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.WxMpXmlOutTextMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
@@ -39,12 +31,6 @@ public class CoreController extends GenericController {
     protected WxMpService wxMpService;
     @Autowired
     protected CoreService coreService;
-
-    protected WxMpMessageRouter wxMpMessageRouter;
-    private static final String CREATE_USER_URL = "http://111.207.243.66:8886/SZBProject/wxinfo/insert";
-    private static final String CREATE_SHOP_URL = "http://111.207.243.66:8886/SZBProject/shop/create?openId=";
-
-    private static final Logger log = LoggerFactory.getLogger(CoreController.class);
 
     @RequestMapping(value = "index")
     public String index() {
@@ -67,30 +53,6 @@ public class CoreController extends GenericController {
         String nonce = request.getParameter("nonce");
         String timestamp = request.getParameter("timestamp");
 
-        //订阅事件消息处理
-        WxMpMessageHandler subscribeHandler = new WxMpMessageHandler() {
-            @Override
-            public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-                WxMpUser wxMpUser = getUserInfo(wxMessage.getFromUserName(), "zh_CN");
-                WxMpXmlOutTextMessage m
-                        = WxMpXmlOutMessage.TEXT()
-                        .content("尊敬的" + wxMpUser.getNickname() + "，您好 ！")
-                        .fromUser(wxMessage.getToUserName())
-                        .toUser(wxMessage.getFromUserName())
-                        .build();
-                log.info("subscribeMessageHandler: " + m.getContent());
-                return m;
-            }
-        };
-
-        wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
-        wxMpMessageRouter
-                .rule()
-                .async(false)
-                .event(WxConsts.EVT_SUBSCRIBE)
-                .handler(subscribeHandler)
-                .end();
-
         if (!wxMpService.checkSignature(timestamp, nonce, signature)) {
             // 消息签名不正确，说明不是公众平台发过来的消息
             response.getWriter().println("非法请求");
@@ -111,7 +73,7 @@ public class CoreController extends GenericController {
         if ("raw".equals(encryptType)) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(request.getInputStream());
-            WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
+            WxMpXmlOutMessage outMessage = coreService.route(inMessage);
             response.getWriter().write(outMessage.toXml());
             return;
         }
@@ -120,8 +82,9 @@ public class CoreController extends GenericController {
             // 是aes加密的消息
             String msgSignature = request.getParameter("msg_signature");
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(request.getInputStream(), configStorage, timestamp, nonce, msgSignature);
-            WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
-            log.info(response.toString());
+            logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            WxMpXmlOutMessage outMessage = coreService.route(inMessage);
+            logger.info(response.toString());
             response.getWriter().write(outMessage.toEncryptedXml(configStorage));
             return;
         }
@@ -151,24 +114,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            log.error(e.getError().toString());
-        }
-        return wxMpUser;
-    }
-
-    /**
-     * 通过openid获得基本用户信息的重载方法，去除HttpServletResponse对象，否则会空指针
-     *
-     * @param openid
-     * @param lang
-     * @return
-     */
-    public WxMpUser getUserInfo(String openid, String lang) {
-        WxMpUser wxMpUser = null;
-        try {
-            wxMpUser = wxMpService.userInfo(openid, lang);
-        } catch (WxErrorException e) {
-            log.error(e.getError().toString());
+            logger.error(e.getError().toString());
         }
         return wxMpUser;
     }
@@ -196,7 +142,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            log.error(e.getError().toString());
+            logger.error(e.getError().toString());
         }
     }
 
@@ -220,7 +166,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            log.error(e.getError().toString());
+            logger.error(e.getError().toString());
         }
     }
 

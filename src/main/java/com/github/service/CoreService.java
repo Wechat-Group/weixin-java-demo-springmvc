@@ -1,5 +1,8 @@
 package com.github.service;
 
+import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 
@@ -29,5 +32,27 @@ public interface CoreService {
      * @throws IOException
      */
     public void requestPost(String url, List<NameValuePair> params) throws ClientProtocolException, IOException;
+
+    /**
+     * 刷新消息路由器
+     */
+    public void refreshRouter();
+
+    /**
+     * 路由消息
+     *
+     * @param inMessage
+     * @return
+     */
+    public WxMpXmlOutMessage route(WxMpXmlMessage inMessage);
+
+    /**
+     * 通过openid获得基本用户信息
+     *
+     * @param openid
+     * @param lang
+     * @return
+     */
+    public WxMpUser getUserInfo(String openid, String lang);
 
 }
