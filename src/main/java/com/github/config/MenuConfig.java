@@ -67,6 +67,11 @@ public class MenuConfig {
         return menu;
     }
 
+    /**
+     * 运行此main函数即可生成公众号自定义菜单
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         MainConfig mainConfig = new MainConfig();
         WxMpService wxMpService = mainConfig.wxMpService();

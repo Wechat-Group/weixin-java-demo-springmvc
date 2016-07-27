@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MainConfig {
 
+    //TODO 填写公众号开发信息
     //商站宝测试公众号 APP_ID
     protected static final String APP_ID = "";
     //商站宝测试公众号 APP_SECRET
