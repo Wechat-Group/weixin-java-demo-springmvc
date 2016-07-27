@@ -1,7 +1,9 @@
 package com.github.controller;
 
+import com.github.service.CoreService;
 import com.github.util.MD5Util;
 import com.github.util.ReturnModel;
+import com.github.util.Sha1Util;
 import com.github.util.XMLUtil;
 import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -17,8 +19,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,12 +47,18 @@ import java.util.TreeMap;
 @RequestMapping(value = "wxPay")
 public class PaymentController extends GenericController {
 
+
     @Autowired
     protected WxMpConfigStorage configStorage;
     @Autowired
     protected WxMpService wxMpService;
+    @Autowired
+    protected CoreService coreService;
 
-    private static final Logger log = LoggerFactory.getLogger(PaymentController.class);
+    //企业向个人转账微信API路径
+    private static final String ENTERPRISE_PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+    //apiclient_cert.p12证书存放路径
+    private static final String CERTIFICATE_LOCATION = "";
 
     /**
      * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
@@ -82,9 +88,9 @@ public class PaymentController extends GenericController {
         payInfo.put("trade_type", trade_type);
         payInfo.put("spbill_create_ip", spbill_create_ip);
         payInfo.put("notify_url", "");
-        log.info("PartnerKey is :" + configStorage.getPartnerKey());
+        logger.info("PartnerKey is :" + configStorage.getPartnerKey());
         wxMpPrepayIdResult = wxMpService.getPrepayId(payInfo);
-        log.info(new Gson().toJson(wxMpPrepayIdResult));
+        logger.info(new Gson().toJson(wxMpPrepayIdResult));
         renderString(response, wxMpPrepayIdResult);
     }
 
@@ -115,7 +121,7 @@ public class PaymentController extends GenericController {
         prepayInfo.put("body", body);
         prepayInfo.put("trade_type", trade_type);
         prepayInfo.put("spbill_create_ip", spbill_create_ip);
-        //微信通知支付结果地址
+        //TODO 填写通知回调地址
         prepayInfo.put("notify_url", "");
         try {
             Map<String, String> payInfo = wxMpService.getPayInfo(prepayInfo);
@@ -126,7 +132,7 @@ public class PaymentController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            log.error(e.getError().toString());
+            logger.error(e.getError().toString());
         }
     }
 
@@ -139,9 +145,50 @@ public class PaymentController extends GenericController {
     @RequestMapping(value = "getJSSDKCallbackData")
     public void getJSSDKCallbackData(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
-            if (wxMpService.checkJSSDKCallbackDataSignature(kvm, kvm.get("sign"))) {
-                //// TODO: 2016/7/7 0007 处理微信服务器通知的支付结果并对业务系统进行操作
+            synchronized (this) {
+                Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
+                if (wxMpService.checkJSSDKCallbackDataSignature(kvm, kvm.get("sign"))) {
+                    if (kvm.get("result_code").equals("SUCCESS")) {
+                        //TODO 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
+                        logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");
+                        response.getWriter().write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[ok]]></return_msg></xml>");
+                    } else {
+                        logger.error("out_trade_no: " + kvm.get("out_trade_no") + " result_code is FAIL");
+                        response.getWriter().write("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
+                    }
+                } else {
+                    response.getWriter().write("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[check signature FAIL]]></return_msg></xml>");
+                    logger.error("out_trade_no: " + kvm.get("out_trade_no") + " check signature FAIL");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "payToIndividual")
+    public void payToIndividual(HttpServletResponse response,
+                                @RequestParam(value = "partner_trade_no") String partner_trade_no,
+                                @RequestParam(value = "openid") String openid,
+                                @RequestParam(value = "amount") String amount,
+                                @RequestParam(value = "desc") String desc,
+                                @RequestParam(value = "spbill_create_ip") String spbill_create_ip) {
+        TreeMap<String, String> map = new TreeMap<String, String>();
+        map.put("mch_appid", configStorage.getAppId());
+        map.put("mchid", configStorage.getPartnerId());
+        map.put("nonce_str", Sha1Util.getNonceStr());
+        map.put("partner_trade_no", partner_trade_no);
+        map.put("openid", openid);
+        map.put("check_name", "NO_CHECK");
+        map.put("amount", amount);
+        map.put("desc", desc);
+        map.put("spbill_create_ip", spbill_create_ip);
+        try {
+            Map<String, String> returnMap = enterprisePay(map, configStorage.getPartnerKey(), CERTIFICATE_LOCATION, ENTERPRISE_PAY_URL);
+            if ("SUCCESS".equals(returnMap.get("result_code").toUpperCase()) && "SUCCESS".equals(returnMap.get("return_code").toUpperCase())) {
+                logger.info("企业对个人付款成功！\n付款信息：\n" + returnMap.toString());
+            } else {
+                logger.error("err_code: " + returnMap.get("err_code") + "  err_code_des: " + returnMap.get("err_code_des"));
             }
         } catch (Exception e) {
             e.printStackTrace();
