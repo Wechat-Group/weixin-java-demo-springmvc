@@ -21,5 +21,5 @@ hs_err_pid*
 /work
 /src/main/webapp/.#webclasspath
 
-.idea
+.idea/
 weixin-java-tools-springmvc.iml
