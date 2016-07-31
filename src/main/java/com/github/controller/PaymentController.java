@@ -22,7 +22,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * 微信支付Controller
  * <p>
@@ -48,6 +49,10 @@ import java.util.TreeMap;
 public class PaymentController extends GenericController {
 
 
+    //企业向个人转账微信API路径
+    private static final String ENTERPRISE_PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+    //apiclient_cert.p12证书存放路径
+    private static final String CERTIFICATE_LOCATION = "";
     @Autowired
     protected WxMpConfigStorage configStorage;
     @Autowired
@@ -55,38 +60,22 @@ public class PaymentController extends GenericController {
     @Autowired
     protected CoreService coreService;
 
-    //企业向个人转账微信API路径
-    private static final String ENTERPRISE_PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
-    //apiclient_cert.p12证书存放路径
-    private static final String CERTIFICATE_LOCATION = "";
-
     /**
      * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
      *
      * @param response
-     * @param openid
-     * @param out_trade_no
-     * @param total_fee
-     * @param body
-     * @param trade_type
-     * @param spbill_create_ip
+     * @param request
      */
     @RequestMapping(value = "getPrepayIdResult")
-    public void getPrepayId(HttpServletResponse response,
-                            @RequestParam(value = "openid") String openid,
-                            @RequestParam(value = "out_trade_no") String out_trade_no,
-                            @RequestParam(value = "total_fee") String total_fee,
-                            @RequestParam(value = "body") String body,
-                            @RequestParam(value = "trade_type") String trade_type,
-                            @RequestParam(value = "spbill_create_ip") String spbill_create_ip) {
+    public void getPrepayId(HttpServletResponse response, HttpServletRequest request) {
         WxMpPrepayIdResult wxMpPrepayIdResult;
         Map<String, String> payInfo = new HashMap<String, String>();
-        payInfo.put("openid", openid);
-        payInfo.put("out_trade_no", out_trade_no);
-        payInfo.put("total_fee", total_fee);
-        payInfo.put("body", body);
-        payInfo.put("trade_type", trade_type);
-        payInfo.put("spbill_create_ip", spbill_create_ip);
+        payInfo.put("openid", request.getParameter("openid"));
+        payInfo.put("out_trade_no", request.getParameter("out_trade_no"));
+        payInfo.put("total_fee", request.getParameter("total_fee"));
+        payInfo.put("body", request.getParameter("body"));
+        payInfo.put("trade_type", request.getParameter("trade_type"));
+        payInfo.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
         payInfo.put("notify_url", "");
         logger.info("PartnerKey is :" + configStorage.getPartnerKey());
         wxMpPrepayIdResult = wxMpService.getPrepayId(payInfo);
@@ -98,30 +87,20 @@ public class PaymentController extends GenericController {
      * 返回前台H5调用JS支付所需要的参数，公众号支付调用此接口
      *
      * @param response
-     * @param openid
-     * @param out_trade_no
-     * @param total_fee
-     * @param body
-     * @param trade_type
-     * @param spbill_create_ip
+     * @param request
      */
     @RequestMapping(value = "getJSSDKPayInfo")
     public void getJSSDKPayInfo(HttpServletResponse response,
-                                @RequestParam(value = "openid") String openid,
-                                @RequestParam(value = "out_trade_no") String out_trade_no,
-                                @RequestParam(value = "total_fee") String total_fee,
-                                @RequestParam(value = "body") String body,
-                                @RequestParam(value = "trade_type") String trade_type,
-                                @RequestParam(value = "spbill_create_ip") String spbill_create_ip) {
+                                HttpServletRequest request) {
         ReturnModel returnModel = new ReturnModel();
         Map<String, String> prepayInfo = new HashMap<String, String>();
-        prepayInfo.put("openid", openid);
-        prepayInfo.put("out_trade_no", out_trade_no);
-        prepayInfo.put("total_fee", total_fee);
-        prepayInfo.put("body", body);
-        prepayInfo.put("trade_type", trade_type);
-        prepayInfo.put("spbill_create_ip", spbill_create_ip);
-        //TODO 填写通知回调地址
+        prepayInfo.put("openid", request.getParameter("openid"));
+        prepayInfo.put("out_trade_no", request.getParameter("out_trade_no"));
+        prepayInfo.put("total_fee", request.getParameter("total_fee"));
+        prepayInfo.put("body", request.getParameter("body"));
+        prepayInfo.put("trade_type", request.getParameter("trade_type"));
+        prepayInfo.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
+        //TODO(user) 填写通知回调地址
         prepayInfo.put("notify_url", "");
         try {
             Map<String, String> payInfo = wxMpService.getPayInfo(prepayInfo);
@@ -149,7 +128,7 @@ public class PaymentController extends GenericController {
                 Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
                 if (wxMpService.checkJSSDKCallbackDataSignature(kvm, kvm.get("sign"))) {
                     if (kvm.get("result_code").equals("SUCCESS")) {
-                        //TODO 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
+                        //TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
                         logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");
                         response.getWriter().write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[ok]]></return_msg></xml>");
                     } else {
@@ -168,21 +147,17 @@ public class PaymentController extends GenericController {
 
     @RequestMapping(value = "payToIndividual")
     public void payToIndividual(HttpServletResponse response,
-                                @RequestParam(value = "partner_trade_no") String partner_trade_no,
-                                @RequestParam(value = "openid") String openid,
-                                @RequestParam(value = "amount") String amount,
-                                @RequestParam(value = "desc") String desc,
-                                @RequestParam(value = "spbill_create_ip") String spbill_create_ip) {
+                                HttpServletRequest request) {
         TreeMap<String, String> map = new TreeMap<String, String>();
         map.put("mch_appid", configStorage.getAppId());
         map.put("mchid", configStorage.getPartnerId());
         map.put("nonce_str", Sha1Util.getNonceStr());
-        map.put("partner_trade_no", partner_trade_no);
-        map.put("openid", openid);
+        map.put("partner_trade_no", request.getParameter("partner_trade_no"));
+        map.put("openid", request.getParameter("openid"));
         map.put("check_name", "NO_CHECK");
-        map.put("amount", amount);
-        map.put("desc", desc);
-        map.put("spbill_create_ip", spbill_create_ip);
+        map.put("amount", request.getParameter("amount"));
+        map.put("desc", request.getParameter("desc"));
+        map.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
         try {
             Map<String, String> returnMap = enterprisePay(map, configStorage.getPartnerKey(), CERTIFICATE_LOCATION, ENTERPRISE_PAY_URL);
             if ("SUCCESS".equals(returnMap.get("result_code").toUpperCase()) && "SUCCESS".equals(returnMap.get("return_code").toUpperCase())) {
@@ -203,81 +178,84 @@ public class PaymentController extends GenericController {
      */
     /**
      * @param map,根据map中的 map中包含字段
-     *                    mch_appid	微信分配的公众账号ID（企业号corpid即为此appId）
-     *                    mchid		微信支付分配的商户号
-     *                    nonce_str	随机字符串，不长于32位
-     *                    partner_trade_no		商户订单号，需保持唯一性
-     *                    openid		商户appid下，某用户的openid
-     *                    check_name	是否校验真实姓名,如果需要,则还需要传re_user_name字段    NO_CHECK：不校验真实姓名
-     *                    amount		支付金额,以分为单位
-     *                    desc		企业付款操作说明信息。必填。
-     *                    spbill_create_ip	调用接口的机器Ip地址(随便填,查询订单详情时会显示出来)
+     *                    mch_appid         微信分配的公众账号ID（企业号corpid即为此appId）
+     *                    mchid             微信支付分配的商户号
+     *                    nonce_str         随机字符串，不长于32位
+     *                    partner_trade_no  商户订单号，需保持唯一性
+     *                    openid            商户appid下，某用户的openid
+     *                    check_name        是否校验真实姓名,如果需要,则还需要传re_user_name字段    NO_CHECK：不校验真实姓名
+     *                    amount            支付金额,以分为单位
+     *                    desc              企业付款操作说明信息。必填。
+     *                    spbill_create_ip  调用接口的机器Ip地址(随便填,查询订单详情时会显示出来)
      * @param keys        商品平台支付密匙
      * @param paths       证书路径
      * @param uri         接口地址
      * @return 返回Map<String,String>
      * @throws Exception
      */
-    public Map<String, String> enterprisePay(TreeMap<String, String> map, String keys, String paths, String uri) throws Exception {
-        Map<String, String> returnMap = new HashMap<String, String>();
-        String mch_id = map.get("mchid");
+    public Map<String, String> enterprisePay(Map<String, String> map, String keys, String paths, String uri) throws Exception {
+        String mchId = map.get("mchid");
         Set<Map.Entry<String, String>> entry2 = map.entrySet();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> obj : entry2) {
             String k = obj.getKey();
             String v = obj.getValue();
-            if (v == null && v.equals(""))
-                continue;
-            sb.append(k + "=" + v + "&");
+            if (null == v || "".equals(v)) continue;
+            sb.append(k).append('=').append(v).append('&');
         }
-        sb.append("key=" + keys);
-        String str2 = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+        sb.append("key=").append(keys);
+        String str2 = MD5Util.md5Encode(sb.toString(), "UTF-8").toUpperCase();
         map.put("sign", str2);
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<xml>");
-        if (map != null && !map.isEmpty()) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                buffer.append("<" + entry.getKey() + ">");
-                buffer.append(entry.getValue());
-                buffer.append("</" + entry.getKey() + ">");
-            }
+        StringBuilder builder = new StringBuilder();
+        builder.append("<xml>");
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            builder.append('<').append(entry.getKey()).append('>')
+                .append(entry.getValue())
+                .append("</").append(entry.getKey()).append('>');
         }
-        buffer.append("</xml>");
-        String desc = new String(buffer.toString().getBytes("UTF-8"), "ISO-8859-1");
+        builder.append("</xml>");
+        String desc = new String(builder.toString().getBytes("UTF-8"), "ISO-8859-1");
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(paths));
-        try {
-            keyStore.load(instream, mch_id.toCharArray());
-        } finally {
-            instream.close();
+        try (FileInputStream instream = new FileInputStream(new File(paths))) {
+            keyStore.load(instream, mchId.toCharArray());
         }
-        SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, mch_id.toCharArray()).build();
+        SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, mchId.toCharArray()).build();
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[]{"TLSv1"}, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-        CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-        try {
+        Map<String, String> returnMap;
+        try (CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build()) {
             HttpPost httpPost = new HttpPost(uri);
             StringEntity str = new StringEntity(desc);
             httpPost.setEntity(str);
-            CloseableHttpResponse response = httpclient.execute(httpPost);
-            try {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent()));
-                    String text;
-                    StringBuffer result = new StringBuffer();
-                    while ((text = bufferedReader.readLine()) != null) {
-                        result.append(text);
-                    }
-                    returnMap = XMLUtil.parseXmlStringToMap(new String(result.toString().getBytes(), "UTF-8"));//调用统一接口返回的值转换为XML格式
-                }
-                EntityUtils.consume(entity);
-            } finally {
-                response.close();
-            }
-        } finally {
-            httpclient.close();
+            returnMap = getMap(httpclient, httpPost);
         }
         return returnMap;
     }
 
+    private Map<String, String> getMap(CloseableHttpClient httpclient, HttpPost httpPost) throws Exception {
+        Map<String, String> returnMap;
+        try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+            returnMap = getReturnMap(response);
+        }
+        return returnMap;
+    }
+
+    private Map<String, String> getReturnMap(CloseableHttpResponse response) throws Exception {
+        Map<String, String> returnMap = new HashMap<String, String>();
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent(), UTF_8))) {
+                String text = bufferedReader.readLine();
+                StringBuilder result = new StringBuilder();
+                while (null != text) {
+                    result.append(text);
+                    text = bufferedReader.readLine();
+                }
+                //调用统一接口返回的值转换为XML格式
+                returnMap = XMLUtil.parseXmlStringToMap(new String(result.toString().getBytes(UTF_8), "UTF-8"));
+            }
+        }
+        EntityUtils.consume(entity);
+        return returnMap;
+    }
 }
+

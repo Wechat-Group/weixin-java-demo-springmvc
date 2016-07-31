@@ -1,7 +1,11 @@
 package com.github.util;
 
 import java.security.MessageDigest;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
 
 /**
  * createSHA1Sign创建签名SHA1
@@ -11,7 +15,7 @@ public class Sha1Util {
 
     public static String getNonceStr() {
         Random random = new Random();
-        return MD5Util.MD5Encode(String.valueOf(random.nextInt(10000)), "UTF-8");
+        return MD5Util.md5Encode(String.valueOf(random.nextInt(10000)), "UTF-8");
     }
 
     public static String getTimeStamp() {
@@ -41,7 +45,7 @@ public class Sha1Util {
             return null;
         }
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'a', 'b', 'c', 'd', 'e', 'f'};
+            'a', 'b', 'c', 'd', 'e', 'f'};
 
         try {
             MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
@@ -58,6 +62,7 @@ public class Sha1Util {
             }
             return new String(buf);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

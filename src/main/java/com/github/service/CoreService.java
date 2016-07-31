@@ -18,10 +18,10 @@ public interface CoreService {
     /**
      * HttpGet请求
      *
-     *  @param urlWithParams
+     * @param urlWithParams
      * @throws Exception
      */
-    public void requestGet(String urlWithParams) throws IOException;
+    void requestGet(String urlWithParams) throws IOException;
 
     /**
      * HttpPost请求
@@ -31,12 +31,12 @@ public interface CoreService {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    public void requestPost(String url, List<NameValuePair> params) throws ClientProtocolException, IOException;
+    void requestPost(String url, List<NameValuePair> params) throws ClientProtocolException, IOException;
 
     /**
      * 刷新消息路由器
      */
-    public void refreshRouter();
+    void refreshRouter();
 
     /**
      * 路由消息
@@ -44,7 +44,7 @@ public interface CoreService {
      * @param inMessage
      * @return
      */
-    public WxMpXmlOutMessage route(WxMpXmlMessage inMessage);
+    WxMpXmlOutMessage route(WxMpXmlMessage inMessage);
 
     /**
      * 通过openid获得基本用户信息
@@ -53,6 +53,6 @@ public interface CoreService {
      * @param lang
      * @return
      */
-    public WxMpUser getUserInfo(String openid, String lang);
+    WxMpUser getUserInfo(String openid, String lang);
 
 }

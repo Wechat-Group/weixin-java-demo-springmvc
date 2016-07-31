@@ -59,16 +59,17 @@ public class CoreController extends GenericController {
             return;
         }
 
-        String echostr = request.getParameter("echostr");
-        if (StringUtils.isNotBlank(echostr)) {
+        String echoStr = request.getParameter("echostr");
+        if (StringUtils.isNotBlank(echoStr)) {
             // 说明是一个仅仅用来验证的请求，回显echostr
-            response.getWriter().println(echostr);
+            String echoStrOut = String.copyValueOf(echoStr.toCharArray());
+            response.getWriter().println(echoStrOut);
             return;
         }
 
-        String encryptType = StringUtils.isBlank(request.getParameter("encrypt_type")) ?
-                "raw" :
-                request.getParameter("encrypt_type");
+        String encryptType = StringUtils.isBlank(request.getParameter("encrypt_type"))
+            ? "raw"
+            : request.getParameter("encrypt_type");
 
         if ("raw".equals(encryptType)) {
             // 明文传输的消息
