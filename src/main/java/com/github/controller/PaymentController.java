@@ -226,8 +226,9 @@ public class PaymentController extends GenericController {
         for (Map.Entry<String, String> obj : entry2) {
             String k = obj.getKey();
             String v = obj.getValue();
-            if (v == null && v.equals(""))
+            if (v == null || v.equals("")) {
                 continue;
+            }
             sb.append(k + "=" + v + "&");
         }
         sb.append("key=" + keys);
