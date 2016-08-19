@@ -1,16 +1,10 @@
 package com.github.service.impl;
 
-import com.github.handler.LogHandler;
-import com.github.handler.MsgHandler;
-import com.github.handler.SubscribeHandler;
-import com.github.service.CoreService;
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
-import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import java.io.IOException;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -28,9 +22,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.List;
+import com.github.handler.LogHandler;
+import com.github.handler.MsgHandler;
+import com.github.handler.SubscribeHandler;
+import com.github.service.CoreService;
+
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
@@ -98,15 +101,16 @@ public class CoreServiceImpl implements CoreService {
 
     @Override
     public void refreshRouter() {
-        final WxMpMessageRouter newRouter = new WxMpMessageRouter(wxMpService);
+        final WxMpMessageRouter newRouter = new WxMpMessageRouter(
+            this.wxMpService);
         // 记录所有事件的日志
         newRouter.rule().handler(this.logHandler).next();
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-                .event(WxConsts.EVT_SUBSCRIBE).handler(subscribeHandler)
+            .event(WxConsts.EVT_SUBSCRIBE).handler(this.subscribeHandler)
                 .end();
         // 默认
-        newRouter.rule().async(false).handler(msgHandler).end();
+        newRouter.rule().async(false).handler(this.msgHandler).end();
         this.router = newRouter;
     }
 
@@ -125,9 +129,9 @@ public class CoreServiceImpl implements CoreService {
     public WxMpUser getUserInfo(String openid, String lang) {
         WxMpUser wxMpUser = null;
         try {
-            wxMpUser = wxMpService.userInfo(openid, lang);
+            wxMpUser = this.wxMpService.getUserService().userInfo(openid, lang);
         } catch (WxErrorException e) {
-            logger.error(e.getError().toString());
+            this.logger.error(e.getError().toString());
         }
         return wxMpUser;
     }

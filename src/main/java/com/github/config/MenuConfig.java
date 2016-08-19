@@ -1,7 +1,8 @@
 package com.github.config;
 
 import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.bean.WxMenu;
+import me.chanjar.weixin.common.bean.menu.WxMenu;
+import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 
@@ -22,30 +23,30 @@ public class MenuConfig {
         WxMpService wxMpService = mainConfig.wxMpService();
 
         WxMenu menu = new WxMenu();
-        WxMenu.WxMenuButton button1 = new WxMenu.WxMenuButton();
+        WxMenuButton button1 = new WxMenuButton();
         button1.setType(WxConsts.BUTTON_VIEW);
         button1.setName("买家订单");
         button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
-        WxMenu.WxMenuButton button2 = new WxMenu.WxMenuButton();
+        WxMenuButton button2 = new WxMenuButton();
         button2.setName("我是卖家");
 
-        WxMenu.WxMenuButton button21 = new WxMenu.WxMenuButton();
+        WxMenuButton button21 = new WxMenuButton();
         button21.setType(WxConsts.BUTTON_VIEW);
         button21.setName("我的订单");
         button21.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
-        WxMenu.WxMenuButton button22 = new WxMenu.WxMenuButton();
+        WxMenuButton button22 = new WxMenuButton();
         button22.setType(WxConsts.BUTTON_VIEW);
         button22.setName("收入统计");
         button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
-        WxMenu.WxMenuButton button23 = new WxMenu.WxMenuButton();
+        WxMenuButton button23 = new WxMenuButton();
         button23.setType(WxConsts.BUTTON_VIEW);
         button23.setName("发布商品");
         button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
-        WxMenu.WxMenuButton button24 = new WxMenu.WxMenuButton();
+        WxMenuButton button24 = new WxMenuButton();
         button24.setType(WxConsts.BUTTON_VIEW);
         button24.setName("商品管理");
         button24.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
@@ -55,7 +56,7 @@ public class MenuConfig {
         button2.getSubButtons().add(button23);
         button2.getSubButtons().add(button24);
 
-        WxMenu.WxMenuButton button3 = new WxMenu.WxMenuButton();
+        WxMenuButton button3 = new WxMenuButton();
         button3.setType(WxConsts.BUTTON_CLICK);
         button3.setName("使用帮助");
         button3.setKey("help");
@@ -76,7 +77,7 @@ public class MenuConfig {
         MainConfig mainConfig = new MainConfig();
         WxMpService wxMpService = mainConfig.wxMpService();
         try {
-            wxMpService.menuCreate(getMenu());
+            wxMpService.getMenuService().menuCreate(getMenu());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }

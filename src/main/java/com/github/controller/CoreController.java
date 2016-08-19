@@ -1,7 +1,16 @@
 package com.github.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.github.service.CoreService;
 import com.github.util.ReturnModel;
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.util.StringUtils;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -10,13 +19,6 @@ import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
@@ -53,7 +55,7 @@ public class CoreController extends GenericController {
         String nonce = request.getParameter("nonce");
         String timestamp = request.getParameter("timestamp");
 
-        if (!wxMpService.checkSignature(timestamp, nonce, signature)) {
+        if (!this.wxMpService.checkSignature(timestamp, nonce, signature)) {
             // 消息签名不正确，说明不是公众平台发过来的消息
             response.getWriter().println("非法请求");
             return;
@@ -73,7 +75,7 @@ public class CoreController extends GenericController {
         if ("raw".equals(encryptType)) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(request.getInputStream());
-            WxMpXmlOutMessage outMessage = coreService.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.coreService.route(inMessage);
             response.getWriter().write(outMessage.toXml());
             return;
         }
@@ -81,11 +83,14 @@ public class CoreController extends GenericController {
         if ("aes".equals(encryptType)) {
             // 是aes加密的消息
             String msgSignature = request.getParameter("msg_signature");
-            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(request.getInputStream(), configStorage, timestamp, nonce, msgSignature);
-            logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
-            WxMpXmlOutMessage outMessage = coreService.route(inMessage);
-            logger.info(response.toString());
-            response.getWriter().write(outMessage.toEncryptedXml(configStorage));
+            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
+                request.getInputStream(), this.configStorage, timestamp, nonce,
+                msgSignature);
+            this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            WxMpXmlOutMessage outMessage = this.coreService.route(inMessage);
+            this.logger.info(response.toString());
+            response.getWriter()
+                .write(outMessage.toEncryptedXml(this.configStorage));
             return;
         }
 
@@ -106,7 +111,7 @@ public class CoreController extends GenericController {
         ReturnModel returnModel = new ReturnModel();
         WxMpUser wxMpUser = null;
         try {
-            wxMpUser = wxMpService.userInfo(openid, lang);
+            wxMpUser = this.wxMpService.getUserService().userInfo(openid, lang);
             returnModel.setResult(true);
             returnModel.setDatum(wxMpUser);
             renderString(response, returnModel);
@@ -114,7 +119,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            logger.error(e.getError().toString());
+            this.logger.error(e.getError().toString());
         }
         return wxMpUser;
     }
@@ -133,8 +138,9 @@ public class CoreController extends GenericController {
         WxMpOAuth2AccessToken accessToken;
         WxMpUser wxMpUser;
         try {
-            accessToken = wxMpService.oauth2getAccessToken(code);
-            wxMpUser = wxMpService.userInfo(accessToken.getOpenId(), lang);
+            accessToken = this.wxMpService.oauth2getAccessToken(code);
+            wxMpUser = this.wxMpService.getUserService()
+                .userInfo(accessToken.getOpenId(), lang);
             returnModel.setResult(true);
             returnModel.setDatum(wxMpUser);
             renderString(response, returnModel);
@@ -142,7 +148,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            logger.error(e.getError().toString());
+            this.logger.error(e.getError().toString());
         }
     }
 
@@ -158,7 +164,7 @@ public class CoreController extends GenericController {
         ReturnModel returnModel = new ReturnModel();
         WxMpOAuth2AccessToken accessToken;
         try {
-            accessToken = wxMpService.oauth2getAccessToken(code);
+            accessToken = this.wxMpService.oauth2getAccessToken(code);
             returnModel.setResult(true);
             returnModel.setDatum(accessToken.getOpenId());
             renderString(response, returnModel);
@@ -166,7 +172,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            logger.error(e.getError().toString());
+            this.logger.error(e.getError().toString());
         }
     }
 
