@@ -8,22 +8,6 @@
     <artifactId>weixin-java-tools-springmvc</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <build>
-        <finalName>wechatService</finalName>
-        <plugins>
-            <!-- Maven插件 配置 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${plugin.maven-compiler}</version>
-                <configuration>
-                    <source>${project.build.jdk}</source>
-                    <target>${project.build.jdk}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <properties>
         <!-- base setting -->
@@ -35,7 +19,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <weixin-java-mp.version>2.0.4</weixin-java-mp.version>
+        <weixin-java-mp.version>2.1.1</weixin-java-mp.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>4.2.6.RELEASE</spring.version>
@@ -233,5 +217,22 @@
         </dependency>
 
     </dependencies>
+    
+    <build>
+        <finalName>wechatService</finalName>
+        <plugins>
+            <!-- Maven插件 配置 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${plugin.maven-compiler}</version>
+                <configuration>
+                    <source>${project.build.jdk}</source>
+                    <target>${project.build.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
