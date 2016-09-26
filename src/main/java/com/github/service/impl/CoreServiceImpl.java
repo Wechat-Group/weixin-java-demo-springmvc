@@ -50,10 +50,8 @@ public class CoreServiceImpl implements CoreService {
     protected SubscribeHandler subscribeHandler;
     @Autowired
     protected MsgHandler msgHandler;
-
-    private WxMpMessageRouter router;
-
     protected Logger logger = LoggerFactory.getLogger(getClass());
+    private WxMpMessageRouter router;
 
     @PostConstruct
     public void init() {
@@ -67,16 +65,16 @@ public class CoreServiceImpl implements CoreService {
         httpget.addHeader("Content-Type", "text/html;charset=UTF-8");
         //配置请求的超时设置
         RequestConfig requestConfig = RequestConfig.custom()
-                .setConnectionRequestTimeout(50)
-                .setConnectTimeout(50)
-                .setSocketTimeout(50).build();
+            .setConnectionRequestTimeout(50)
+            .setConnectTimeout(50)
+            .setSocketTimeout(50).build();
         httpget.setConfig(requestConfig);
 
         CloseableHttpResponse response = httpclient.execute(httpget);
         System.out.println("StatusCode -> " + response.getStatusLine().getStatusCode());
 
         HttpEntity entity = response.getEntity();
-        String jsonStr = EntityUtils.toString(entity);//, "utf-8");
+        String jsonStr = EntityUtils.toString(entity);
         System.out.println(jsonStr);
 
         httpget.releaseConnection();

@@ -28,22 +28,8 @@ public class XMLUtil {
      */
     public static Map<String, String> parseRequestXmlToMap(HttpServletRequest request) throws Exception {
         // 解析结果存储在HashMap中
-        Map<String, String> resultMap = new HashMap<String, String>();
+        Map<String, String> resultMap;
         InputStream inputStream = request.getInputStream();
-        resultMap = parseInputStreamToMap(inputStream);
-        return resultMap;
-    }
-
-    /**
-     * 将String类型的XML解析为Map
-     *
-     * @param str
-     * @return
-     * @throws Exception
-     */
-    public static Map<String, String> parseXmlStringToMap(String str) throws Exception {
-        Map<String, String> resultMap = new HashMap<String, String>();
-        InputStream inputStream = new ByteArrayInputStream(str.getBytes("UTF-8"));
         resultMap = parseInputStreamToMap(inputStream);
         return resultMap;
     }
@@ -73,6 +59,20 @@ public class XMLUtil {
         //释放资源
         inputStream.close();
         return map;
+    }
+
+    /**
+     * 将String类型的XML解析为Map
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static Map<String, String> parseXmlStringToMap(String str) throws Exception {
+        Map<String, String> resultMap;
+        InputStream inputStream = new ByteArrayInputStream(str.getBytes("UTF-8"));
+        resultMap = parseInputStreamToMap(inputStream);
+        return resultMap;
     }
 
 }

@@ -1,0 +1,9 @@
+<FindBugsFilter>
+    <!--refer to http://findbugs.sourceforge.net/bugDescriptions.html for all Bug code-->
+    <Match>
+        <!--RV: Method ignores exceptional return value, this is OK for us, a lot of 3rd party lib results in side effect (which is not good practice), like File.mkdirs()-->
+        <!--EI: May expose internal representation by returning reference to mutable object (EI_EXPOSE_REP)-->
+        <!--EI2: May expose internal representation by incorporating reference to mutable object (EI_EXPOSE_REP2)-->
+        <Bug code="RV,EI,EI2"/>
+    </Match>
+</FindBugsFilter>

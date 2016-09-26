@@ -73,7 +73,7 @@ public class MenuConfig {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         MainConfig mainConfig = new MainConfig();
         WxMpService wxMpService = mainConfig.wxMpService();
         try {
@@ -81,6 +81,6 @@ public class MenuConfig {
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

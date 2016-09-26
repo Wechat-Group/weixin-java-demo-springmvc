@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * 所有自定义Controller的顶级接口,封装常用的与session和response、request相关的操作
- *
+ * <p>
  * Created by FirenzesEagle on 2016/4/19 0019.
  */
 public abstract class GenericController {
@@ -21,6 +21,7 @@ public abstract class GenericController {
 
     /**
      * 客户端返回JSON字符串
+     *
      * @param response
      * @param object
      * @return
@@ -31,6 +32,7 @@ public abstract class GenericController {
 
     /**
      * 客户端返回字符串
+     *
      * @param response
      * @param string
      * @return
@@ -41,7 +43,7 @@ public abstract class GenericController {
             response.setContentType(type);
             response.setCharacterEncoding("utf-8");
             //解决跨域问题
-            response.setHeader("Access-Control-Allow-Origin","*");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.getWriter().print(string);
             return null;
         } catch (IOException e) {
