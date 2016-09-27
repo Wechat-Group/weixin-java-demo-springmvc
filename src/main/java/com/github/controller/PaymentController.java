@@ -1,5 +1,7 @@
 package com.github.controller;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,9 +39,7 @@ import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpPrepayIdResult;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import me.chanjar.weixin.mp.bean.pay.WxMpPrepayIdResult;
 
 /**
  * 微信支付Controller
@@ -68,9 +68,11 @@ public class PaymentController extends GenericController {
      *
      * @param response
      * @param request
+     * @throws WxErrorException
      */
     @RequestMapping(value = "getPrepayIdResult")
-    public void getPrepayId(HttpServletResponse response, HttpServletRequest request) {
+    public void getPrepayId(HttpServletResponse response,
+            HttpServletRequest request) throws WxErrorException {
         WxMpPrepayIdResult wxMpPrepayIdResult;
         Map<String, String> payInfo = new HashMap<String, String>();
         payInfo.put("openid", request.getParameter("openid"));
