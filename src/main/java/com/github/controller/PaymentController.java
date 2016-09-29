@@ -39,7 +39,8 @@ import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.pay.WxMpPrepayIdResult;
+import me.chanjar.weixin.mp.bean.pay.WxUnifiedOrderRequest;
+import me.chanjar.weixin.mp.bean.pay.WxUnifiedOrderResult;
 
 /**
  * 微信支付Controller
@@ -73,21 +74,20 @@ public class PaymentController extends GenericController {
     @RequestMapping(value = "getPrepayIdResult")
     public void getPrepayId(HttpServletResponse response,
             HttpServletRequest request) throws WxErrorException {
-        WxMpPrepayIdResult wxMpPrepayIdResult;
-        Map<String, String> payInfo = new HashMap<String, String>();
-        payInfo.put("openid", request.getParameter("openid"));
-        payInfo.put("out_trade_no", request.getParameter("out_trade_no"));
-        payInfo.put("total_fee", request.getParameter("total_fee"));
-        payInfo.put("body", request.getParameter("body"));
-        payInfo.put("trade_type", request.getParameter("trade_type"));
-        payInfo.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
-        payInfo.put("notify_url", "");
+        WxUnifiedOrderRequest payInfo = new WxUnifiedOrderRequest();
+        payInfo.setOpenid(request.getParameter("openid"));
+        payInfo.setOutTradeNo(request.getParameter("out_trade_no"));
+        payInfo.setTotalFee(Integer.valueOf(request.getParameter("total_fee")));
+        payInfo.setBody(request.getParameter("body"));
+        payInfo.setTradeType(request.getParameter("trade_type"));
+        payInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
+        payInfo.setNotifyURL("");
         this.logger
             .info("PartnerKey is :" + this.configStorage.getPartnerKey());
-        wxMpPrepayIdResult = this.wxMpService.getPayService()
-            .getPrepayId(payInfo);
-        this.logger.info(new Gson().toJson(wxMpPrepayIdResult));
-        renderString(response, wxMpPrepayIdResult);
+        WxUnifiedOrderResult result = this.wxMpService.getPayService()
+            .unifiedOrder(payInfo);
+        this.logger.info(new Gson().toJson(result));
+        renderString(response, result);
     }
 
     /**
@@ -100,15 +100,17 @@ public class PaymentController extends GenericController {
     public void getJSSDKPayInfo(HttpServletResponse response,
                                 HttpServletRequest request) {
         ReturnModel returnModel = new ReturnModel();
-        Map<String, String> prepayInfo = new HashMap<String, String>();
-        prepayInfo.put("openid", request.getParameter("openid"));
-        prepayInfo.put("out_trade_no", request.getParameter("out_trade_no"));
-        prepayInfo.put("total_fee", request.getParameter("total_fee"));
-        prepayInfo.put("body", request.getParameter("body"));
-        prepayInfo.put("trade_type", request.getParameter("trade_type"));
-        prepayInfo.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
+        WxUnifiedOrderRequest prepayInfo = new WxUnifiedOrderRequest();
+        prepayInfo.setOpenid(request.getParameter("openid"));
+        prepayInfo.setOutTradeNo(request.getParameter("out_trade_no"));
+        prepayInfo
+            .setTotalFee(Integer.valueOf(request.getParameter("total_fee")));
+        prepayInfo.setBody(request.getParameter("body"));
+        prepayInfo.setTradeType(request.getParameter("trade_type"));
+        prepayInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
         //TODO(user) 填写通知回调地址
-        prepayInfo.put("notify_url", "");
+        prepayInfo.setNotifyURL("");
+
         try {
             Map<String, String> payInfo = this.wxMpService.getPayService()
                 .getPayInfo(prepayInfo);
