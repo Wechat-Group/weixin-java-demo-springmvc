@@ -33,7 +33,7 @@ public class SubscribeHandler extends AbstractHandler {
 
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
-        WxMpUser wxMpUser = coreService.getUserInfo(wxMessage.getFromUserName(), "zh_CN");
+        WxMpUser wxMpUser = coreService.getUserInfo(wxMessage.getFromUser(), "zh_CN");
         /*List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("openId", wxMpUser.getOpenId()));
         params.add(new BasicNameValuePair("nickname", wxMpUser.getNickname()));
@@ -44,8 +44,8 @@ public class SubscribeHandler extends AbstractHandler {
         WxMpXmlOutTextMessage m
             = WxMpXmlOutMessage.TEXT()
             .content("尊敬的" + wxMpUser.getNickname() + "，您好！")
-            .fromUser(wxMessage.getToUserName())
-            .toUser(wxMessage.getFromUserName())
+            .fromUser(wxMessage.getToUser())
+            .toUser(wxMessage.getFromUser())
             .build();
         logger.info("subscribeMessageHandler" + m.getContent());
         return m;

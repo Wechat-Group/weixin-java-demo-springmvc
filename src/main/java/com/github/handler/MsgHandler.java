@@ -20,7 +20,7 @@ public class MsgHandler extends AbstractHandler {
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
         return WxMpXmlOutMessage
-                .TRANSFER_CUSTOMER_SERVICE().fromUser(wxMessage.getToUserName())
-                .toUser(wxMessage.getFromUserName()).build();
+                .TRANSFER_CUSTOMER_SERVICE().fromUser(wxMessage.getToUser())
+                .toUser(wxMessage.getFromUser()).build();
     }
 }
