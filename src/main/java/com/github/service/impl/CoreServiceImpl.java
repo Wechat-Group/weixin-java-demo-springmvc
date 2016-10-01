@@ -1,6 +1,7 @@
 package com.github.service.impl;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +16,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ public class CoreServiceImpl implements CoreService {
         CloseableHttpClient httpclient = HttpClientBuilder.create().build();
 
         HttpPost httppost = new HttpPost(url);
-        httppost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+        httppost.setEntity(new UrlEncodedFormEntity(params, StandardCharsets.UTF_8));
 
         CloseableHttpResponse response = httpclient.execute(httppost);
         System.out.println(response.toString());
