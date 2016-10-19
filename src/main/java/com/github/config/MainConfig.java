@@ -1,5 +1,6 @@
 package com.github.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,34 +12,40 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
  * Email:liumingbo2008@gmail.com
+ * 
+ * @author FirenzesEagle
+ * @author BinaryWang
  */
 @Configuration
 public class MainConfig {
 
-    //TODO(user) 填写公众号开发信息
-    //商站宝测试公众号 APP_ID
-    protected static final String APP_ID = "";
-    //商站宝测试公众号 APP_SECRET
-    protected static final String APP_SECRET = "";
-    //商站宝测试公众号 TOKEN
-    protected static final String TOKEN = "";
-    //商站宝测试公众号 AES_KEY
-    protected static final String AES_KEY = "";
+    @Value("#{wxProperties.appid}")
+    private String appid;
 
-    //商站宝微信支付商户号
-    protected static final String PARTNER_ID = "";
-    //商站宝微信支付平台商户API密钥(https://pay.weixin.qq.com/index.php/core/account/api_cert)
-    protected static final String PARTNER_KEY = "";
+    @Value("#{wxProperties.appsecret}")
+    private String appsecret;
+
+    @Value("#{wxProperties.token}")
+    private String token;
+
+    @Value("#{wxProperties.aeskey}")
+    private String aesKey;
+
+    @Value("#{wxProperties.partener_id}")
+    private String partenerId;
+
+    @Value("#{wxProperties.partener_key}")
+    private String partenerKey;
 
     @Bean
     public WxMpConfigStorage wxMpConfigStorage() {
         WxMpInMemoryConfigStorage configStorage = new WxMpInMemoryConfigStorage();
-        configStorage.setAppId(MainConfig.APP_ID);
-        configStorage.setSecret(MainConfig.APP_SECRET);
-        configStorage.setToken(MainConfig.TOKEN);
-        configStorage.setAesKey(MainConfig.AES_KEY);
-        configStorage.setPartnerId(MainConfig.PARTNER_ID);
-        configStorage.setPartnerKey(MainConfig.PARTNER_KEY);
+        configStorage.setAppId(this.appid);
+        configStorage.setSecret(this.appsecret);
+        configStorage.setToken(this.token);
+        configStorage.setAesKey(this.aesKey);
+        configStorage.setPartnerId(this.partenerId);
+        configStorage.setPartnerKey(this.partenerKey);
         return configStorage;
     }
 
