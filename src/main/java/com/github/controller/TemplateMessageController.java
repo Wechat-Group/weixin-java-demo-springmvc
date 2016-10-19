@@ -1,16 +1,17 @@
 package com.github.controller;
 
-import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.WxMpTemplateData;
-import me.chanjar.weixin.mp.bean.WxMpTemplateMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpConfigStorage;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 
 /**
  * 模板消息Controller
@@ -46,7 +47,8 @@ public class TemplateMessageController extends GenericController {
         orderPaySuccessTemplate.addWxMpTemplateData(orderProductNameData);
         orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
         try {
-            wxMpService.templateSend(orderPaySuccessTemplate);
+            wxMpService.getTemplateMsgService()
+                .sendTemplateMsg(orderPaySuccessTemplate);
         } catch (WxErrorException e) {
             logger.error(e.getMessage().toString());
         }
@@ -69,7 +71,8 @@ public class TemplateMessageController extends GenericController {
         orderPaySuccessTemplate.addWxMpTemplateData(orderProductNameData);
         orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
         try {
-            wxMpService.templateSend(orderPaySuccessTemplate);
+            wxMpService.getTemplateMsgService()
+                .sendTemplateMsg(orderPaySuccessTemplate);
         } catch (WxErrorException e) {
             logger.error(e.getMessage().toString());
         }
