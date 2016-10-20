@@ -9,7 +9,7 @@ This repository is a wechat springmvc demo based on **weixin-java-tools**
 
 
 
-本项目目前实现了如下功能：
+## 本项目目前实现了如下功能：
 
 * 与微信服务器的AES加密通信
 * 微信支付
@@ -21,10 +21,36 @@ This repository is a wechat springmvc demo based on **weixin-java-tools**
 * 通过code获得基本用户信息
 
 
-
 Welcome to Pull Requests!
 
 欢迎大家积极Pull Requests来丰富此Demo的功能！
+
+## 快速使用：
+
+**将项目下载到本地**
+```shell
+git clone https://github.com/wechat-group/weixin-java-tools-springmvc
+```
+
+**配置公众号信息**
+
+打开`src/main/resources/wx.properties`文件，配置公众号相关信息。
+
+**Maven打包**
+```shell
+mvn war:war
+```
+
+**上传至服务器**
+
+必须使用服务器的80端口才能与微信服务器进行交互。
+
+**微信公众平台服务器配置**
+
+进入到**微信公众平台**的`开发/基本配置`页面，配置`URL(服务器地址)`、`Token(令牌)`、`EncodingAESKey(消息加解密密钥）`。
+```shell
+URL(服务器地址)：http://192.168.1.1/wechatTestService/core
+```
 
 ## License
 - 本项目的所有代码除另有说明外,均按照 [MIT License](https://github.com/racaljk/hosts/blob/master/LICENSE) 发布。
