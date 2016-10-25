@@ -39,8 +39,8 @@ import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.pay.WxUnifiedOrderRequest;
-import me.chanjar.weixin.mp.bean.pay.WxUnifiedOrderResult;
+import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
+import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
 
 /**
  * 微信支付Controller
@@ -74,7 +74,7 @@ public class PaymentController extends GenericController {
     @RequestMapping(value = "getPrepayIdResult")
     public void getPrepayId(HttpServletResponse response,
             HttpServletRequest request) throws WxErrorException {
-        WxUnifiedOrderRequest payInfo = new WxUnifiedOrderRequest();
+        WxPayUnifiedOrderRequest payInfo = new WxPayUnifiedOrderRequest();
         payInfo.setOpenid(request.getParameter("openid"));
         payInfo.setOutTradeNo(request.getParameter("out_trade_no"));
         payInfo.setTotalFee(Integer.valueOf(request.getParameter("total_fee")));
@@ -84,7 +84,7 @@ public class PaymentController extends GenericController {
         payInfo.setNotifyURL("");
         this.logger
             .info("PartnerKey is :" + this.configStorage.getPartnerKey());
-        WxUnifiedOrderResult result = this.wxMpService.getPayService()
+        WxPayUnifiedOrderResult result = this.wxMpService.getPayService()
             .unifiedOrder(payInfo);
         this.logger.info(new Gson().toJson(result));
         renderString(response, result);
@@ -100,7 +100,7 @@ public class PaymentController extends GenericController {
     public void getJSSDKPayInfo(HttpServletResponse response,
                                 HttpServletRequest request) {
         ReturnModel returnModel = new ReturnModel();
-        WxUnifiedOrderRequest prepayInfo = new WxUnifiedOrderRequest();
+        WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
         prepayInfo.setOpenid(request.getParameter("openid"));
         prepayInfo.setOutTradeNo(request.getParameter("out_trade_no"));
         prepayInfo
