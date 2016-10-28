@@ -2,6 +2,7 @@
 ![doodles](https://www.google.com/logos/doodles/2016/teachers-day-2016-us-6296626244091904.2-hp2x.gif)
 
 ----
+[![Build Status](https://travis-ci.org/wechat-groupweixin-java-tools-springmvc.svg?branch=master)](https://travis-ci.org/wechat-group/weixin-java-tools-springmvc)
 
 This repository is a wechat springmvc demo based on **weixin-java-tools**
 
