@@ -1,11 +1,16 @@
 package com.github.service.impl;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.github.handler.LogHandler;
+import com.github.handler.MsgHandler;
+import com.github.handler.SubscribeHandler;
+import com.github.service.CoreService;
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -22,18 +27,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.handler.LogHandler;
-import com.github.handler.MsgHandler;
-import com.github.handler.SubscribeHandler;
-import com.github.service.CoreService;
-
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
-import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
@@ -106,7 +103,7 @@ public class CoreServiceImpl implements CoreService {
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
             .event(WxConsts.EVT_SUBSCRIBE).handler(this.subscribeHandler)
-                .next();
+                .end();
         // 默认,转发消息给客服人员
         newRouter.rule().async(false).handler(this.msgHandler).end();
         this.router = newRouter;
