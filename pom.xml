@@ -18,7 +18,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <weixin-java-mp.version>2.3.1</weixin-java-mp.version>
+        <weixin-java-mp.version>2.4.0</weixin-java-mp.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>4.2.6.RELEASE</spring.version>
@@ -37,7 +37,7 @@
         <plugin.pmd.version>3.5</plugin.pmd.version>
         <plugin.findbugs.version>3.0.1</plugin.findbugs.version>
     </properties>
-    
+
     <build>
         <finalName>wechatService</finalName>
         <plugins>
