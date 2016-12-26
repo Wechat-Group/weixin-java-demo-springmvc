@@ -137,8 +137,8 @@ public class PaymentController extends GenericController {
         try {
             synchronized (this) {
                 Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
-                if (this.wxMpService.getPayService()
-                    .checkJSSDKCallbackDataSignature(kvm, kvm.get("sign"))) {
+                if (this.wxMpService.getPayService().checkSign(kvm,
+                    kvm.get("sign"))) {
                     if (kvm.get("result_code").equals("SUCCESS")) {
                         //TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
                         logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");
