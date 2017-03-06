@@ -1,21 +1,16 @@
 package com.github.controller;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.net.ssl.SSLContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.github.service.CoreService;
+import com.github.util.MD5Util;
+import com.github.util.ReturnModel;
+import com.github.util.Sha1Util;
+import com.github.util.XMLUtil;
+import com.google.gson.Gson;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpConfigStorage;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
+import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -29,18 +24,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.github.service.CoreService;
-import com.github.util.MD5Util;
-import com.github.util.ReturnModel;
-import com.github.util.Sha1Util;
-import com.github.util.XMLUtil;
-import com.google.gson.Gson;
+import javax.net.ssl.SSLContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
-import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
-import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * 微信支付Controller
@@ -73,7 +70,7 @@ public class PaymentController extends GenericController {
      */
     @RequestMapping(value = "getPrepayIdResult")
     public void getPrepayId(HttpServletResponse response,
-            HttpServletRequest request) throws WxErrorException {
+                            HttpServletRequest request) throws WxErrorException {
         WxPayUnifiedOrderRequest payInfo = new WxPayUnifiedOrderRequest();
         payInfo.setOpenid(request.getParameter("openid"));
         payInfo.setOutTradeNo(request.getParameter("out_trade_no"));
@@ -83,9 +80,9 @@ public class PaymentController extends GenericController {
         payInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
         payInfo.setNotifyURL("");
         this.logger
-            .info("PartnerKey is :" + this.configStorage.getPartnerKey());
+                .info("PartnerKey is :" + this.configStorage.getPartnerKey());
         WxPayUnifiedOrderResult result = this.wxMpService.getPayService()
-            .unifiedOrder(payInfo);
+                .unifiedOrder(payInfo);
         this.logger.info(new Gson().toJson(result));
         renderString(response, result);
     }
@@ -104,7 +101,7 @@ public class PaymentController extends GenericController {
         prepayInfo.setOpenid(request.getParameter("openid"));
         prepayInfo.setOutTradeNo(request.getParameter("out_trade_no"));
         prepayInfo
-            .setTotalFee(Integer.valueOf(request.getParameter("total_fee")));
+                .setTotalFee(Integer.valueOf(request.getParameter("total_fee")));
         prepayInfo.setBody(request.getParameter("body"));
         prepayInfo.setTradeType(request.getParameter("trade_type"));
         prepayInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
@@ -113,7 +110,7 @@ public class PaymentController extends GenericController {
 
         try {
             Map<String, String> payInfo = this.wxMpService.getPayService()
-                .getPayInfo(prepayInfo);
+                    .getPayInfo(prepayInfo);
             returnModel.setResult(true);
             returnModel.setDatum(payInfo);
             renderString(response, returnModel);
@@ -133,27 +130,27 @@ public class PaymentController extends GenericController {
      */
     @RequestMapping(value = "getJSSDKCallbackData")
     public void getJSSDKCallbackData(HttpServletRequest request,
-            HttpServletResponse response) {
+                                     HttpServletResponse response) {
         try {
             synchronized (this) {
                 Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
                 if (this.wxMpService.getPayService().checkSign(kvm,
-                    kvm.get("sign"))) {
+                        configStorage.getPartnerKey())) {
                     if (kvm.get("result_code").equals("SUCCESS")) {
                         //TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
                         logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");
                         response.getWriter().write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[ok]]></return_msg></xml>");
                     } else {
                         this.logger.error("out_trade_no: "
-                            + kvm.get("out_trade_no") + " result_code is FAIL");
+                                + kvm.get("out_trade_no") + " result_code is FAIL");
                         response.getWriter().write(
-                            "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
+                                "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
                     }
                 } else {
                     response.getWriter().write(
-                        "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[check signature FAIL]]></return_msg></xml>");
+                            "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[check signature FAIL]]></return_msg></xml>");
                     this.logger.error("out_trade_no: " + kvm.get("out_trade_no")
-                        + " check signature FAIL");
+                            + " check signature FAIL");
                 }
             }
         } catch (Exception e) {
@@ -176,15 +173,15 @@ public class PaymentController extends GenericController {
         map.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
         try {
             Map<String, String> returnMap = enterprisePay(map,
-                this.configStorage.getPartnerKey(), CERTIFICATE_LOCATION,
-                ENTERPRISE_PAY_URL);
+                    this.configStorage.getPartnerKey(), CERTIFICATE_LOCATION,
+                    ENTERPRISE_PAY_URL);
             if ("SUCCESS".equals(returnMap.get("result_code").toUpperCase())
-                && "SUCCESS"
+                    && "SUCCESS"
                     .equals(returnMap.get("return_code").toUpperCase())) {
                 this.logger.info("企业对个人付款成功！\n付款信息：\n" + returnMap.toString());
             } else {
                 this.logger.error("err_code: " + returnMap.get("err_code")
-                    + "  err_code_des: " + returnMap.get("err_code_des"));
+                        + "  err_code_des: " + returnMap.get("err_code_des"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,7 +191,7 @@ public class PaymentController extends GenericController {
     /**
      * 企业付款方法,传入map,
      * 除用到上面内容外,还用到path(证书磁盘路径),key(商户支付密匙),url(接口地址)
-     * 
+     *
      * @return
      */
     /**
@@ -231,8 +228,8 @@ public class PaymentController extends GenericController {
         builder.append("<xml>");
         for (Map.Entry<String, String> entry : map.entrySet()) {
             builder.append('<').append(entry.getKey()).append('>')
-                .append(entry.getValue())
-                .append("</").append(entry.getKey()).append('>');
+                    .append(entry.getValue())
+                    .append("</").append(entry.getKey()).append('>');
         }
         builder.append("</xml>");
         String desc = new String(builder.toString().getBytes("UTF-8"), "ISO-8859-1");
