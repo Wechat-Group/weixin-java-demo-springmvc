@@ -12,7 +12,7 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 /**
  * Created by FirenzesEagle on 2016/5/30 0030.
  * Email:liumingbo2008@gmail.com
- * 
+ *
  * @author FirenzesEagle
  * @author BinaryWang
  */
@@ -36,6 +36,21 @@ public class MainConfig {
 
     @Value("#{wxProperties.partener_key}")
     private String partenerKey;
+
+    /**
+     * 为了生成自定义菜单使用的构造函数，其他情况Spring框架可以直接注入
+     *
+     * @param appid
+     * @param appsecret
+     * @param token
+     * @param aesKey
+     */
+    protected MainConfig(String appid, String appsecret, String token, String aesKey) {
+        this.appid = appid;
+        this.appsecret = appsecret;
+        this.token = token;
+        this.aesKey = aesKey;
+    }
 
     @Bean
     public WxMpConfigStorage wxMpConfigStorage() {

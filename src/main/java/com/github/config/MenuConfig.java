@@ -3,6 +3,7 @@ package com.github.config;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
+import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 
 /**
@@ -18,7 +19,7 @@ public class MenuConfig {
      */
     protected static WxMenu getMenu() {
 
-        MainConfig mainConfig = new MainConfig();
+        MainConfig mainConfig = new MainConfig("appid", "appsecret", "token", "aesKey");
         WxMpService wxMpService = mainConfig.wxMpService();
 
         WxMenu menu = new WxMenu();
@@ -72,14 +73,14 @@ public class MenuConfig {
      *
      * @param args
      */
-    /*public static void main(String[] args) {
-        MainConfig mainConfig = new MainConfig();
+    public static void main(String[] args) {
+        MainConfig mainConfig = new MainConfig("appid", "appsecret", "token", "aesKey");
         WxMpService wxMpService = mainConfig.wxMpService();
         try {
             wxMpService.getMenuService().menuCreate(getMenu());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
 }
