@@ -38,6 +38,13 @@ public class MainConfig {
     private String partenerKey;
 
     /**
+     * 如果出现 org.springframework.beans.BeanInstantiationException
+     * https://github.com/Wechat-Group/weixin-java-tools-springmvc/issues/7
+     * 请添加以下默认无参构造函数
+     */
+    // protected MainConfig(){}
+    
+    /**
      * 为了生成自定义菜单使用的构造函数，其他情况Spring框架可以直接注入
      *
      * @param appid
