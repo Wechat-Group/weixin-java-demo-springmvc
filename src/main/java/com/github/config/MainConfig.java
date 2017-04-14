@@ -1,5 +1,8 @@
 package com.github.config;
 
+import com.github.binarywang.wxpay.config.WxPayConfig;
+import com.github.binarywang.wxpay.service.WxPayService;
+import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,8 +69,15 @@ public class MainConfig {
         configStorage.setSecret(this.appsecret);
         configStorage.setToken(this.token);
         configStorage.setAesKey(this.aesKey);
-        configStorage.setPartnerId(this.partenerId);
-        configStorage.setPartnerKey(this.partenerKey);
+        return configStorage;
+    }
+
+    @Bean
+    public WxPayConfig payConfig() {
+        WxPayConfig configStorage = new WxPayConfig();
+        configStorage.setAppId(this.appid);
+        configStorage.setMchId(this.partenerId);
+        configStorage.setMchKey(this.partenerKey);
         return configStorage;
     }
 
@@ -76,6 +86,13 @@ public class MainConfig {
         WxMpService wxMpService = new WxMpServiceImpl();
         wxMpService.setWxMpConfigStorage(wxMpConfigStorage());
         return wxMpService;
+    }
+
+    @Bean
+    public WxPayService payService() {
+        WxPayService payService = new WxPayServiceImpl();
+        payService.setConfig(payConfig());
+        return payService;
     }
 
 }

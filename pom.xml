@@ -18,7 +18,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <weixin-java-mp.version>2.4.5.BETA</weixin-java-mp.version>
+        <weixin-java-tools.version>2.6.0</weixin-java-tools.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>4.2.6.RELEASE</spring.version>
@@ -119,7 +119,13 @@
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
-            <version>${weixin-java-mp.version}</version>
+            <version>${weixin-java-tools.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${weixin-java-tools.version}</version>
         </dependency>
 
         <!-- junit -->
