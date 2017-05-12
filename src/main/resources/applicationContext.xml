@@ -17,7 +17,7 @@
 
     <bean id="freemarkerConfig"
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/WEB-INF/views/" />
+        <property name="templateLoaderPath" value="/WEB-INF/views/"/>
         <property name="freemarkerSettings">
             <props>
                 <prop key="template_update_delay">0</prop>
@@ -33,6 +33,8 @@
     <!-- 配置使Spring采用CGLIB代理 -->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <util:properties id="wxProperties" location="classpath:/wx.properties" />
+    <util:properties id="wxProperties" location="classpath:/wx.properties"/>
+
+    <util:properties id="wxPayProperties" location="wxPay.properties"/>
 
 </beans>
