@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class WxPayConfiguration {
-	@Value("#{wxPayProperties.appid}")
+	@Value("#{wxPayProperties.appId}")
 	private String appId;
 
 	@Value("#{wxPayProperties.mchId}")

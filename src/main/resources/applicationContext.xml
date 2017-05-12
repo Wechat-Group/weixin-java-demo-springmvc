@@ -35,6 +35,6 @@
 
     <util:properties id="wxProperties" location="classpath:/wx.properties"/>
 
-    <util:properties id="wxPayProperties" location="wxPay.properties"/>
+    <util:properties id="wxPayProperties" location="classpath:/wxPay.properties"/>
 
 </beans>

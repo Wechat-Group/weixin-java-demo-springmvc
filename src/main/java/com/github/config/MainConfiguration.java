@@ -30,7 +30,7 @@ public class MainConfiguration {
 	@Value("#{wxProperties.token}")
 	private String token;
 
-	@Value("#{wxProperties.aeskey}")
+	@Value("#{wxProperties.aesKey}")
 	private String aesKey;
 
 	@Bean
