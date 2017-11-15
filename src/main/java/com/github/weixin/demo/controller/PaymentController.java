@@ -1,4 +1,4 @@
-package com.github.controller;
+package com.github.weixin.demo.controller;
 
 import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -8,9 +8,9 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.util.SignUtils;
-import com.github.util.ReturnModel;
-import com.github.util.Sha1Util;
-import com.github.util.XMLUtil;
+import com.github.weixin.demo.util.ReturnModel;
+import com.github.weixin.demo.util.Sha1Util;
+import com.github.weixin.demo.util.XMLUtil;
 import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +107,7 @@ public class PaymentController extends GenericController {
     try {
       synchronized (this) {
         Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
-        if (SignUtils.checkSign(kvm, this.payConfig.getMchKey())) {
+        if (SignUtils.checkSign(kvm, null, this.payConfig.getMchKey())) {
           if (kvm.get("result_code").equals("SUCCESS")) {
             //TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
             logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");

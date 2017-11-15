@@ -1,16 +1,16 @@
-package com.github.controller;
+package com.github.weixin.demo.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.weixin.demo.util.ReturnModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.github.service.CoreService;
-import com.github.util.ReturnModel;
+import com.github.weixin.demo.service.CoreService;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;

@@ -99,7 +99,9 @@
             <property name="max" value="5"/>
         </module>
 
-        <module name="Indentation"/>
+      <module name="Indentation">
+        <property name="basicOffset" value="2"/>
+      </module>
 
         <!--Checks that there is no whitespace before a token.-->
         <module name="NoWhitespaceBefore">

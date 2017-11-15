@@ -1,11 +1,10 @@
-package com.github.handler;
+package com.github.weixin.demo.handler;
 
 import java.util.Map;
 
+import com.github.weixin.demo.service.CoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.github.service.CoreService;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;

@@ -1,4 +1,4 @@
-package com.github.handler;
+package com.github.weixin.demo.handler;
 
 import java.util.Map;
 

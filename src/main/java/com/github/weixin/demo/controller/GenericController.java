@@ -1,4 +1,4 @@
-package com.github.controller;
+package com.github.weixin.demo.controller;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;

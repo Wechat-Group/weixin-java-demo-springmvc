@@ -1,4 +1,4 @@
-package com.github.controller;
+package com.github.weixin.demo.controller;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -32,7 +32,7 @@ public class TemplateMessageController extends GenericController {
     @RequestMapping(value = "notifyOrderPaySuccessTemplate")
     public void notifyOrderPaySuccessTemplate(HttpServletResponse response,
                                               HttpServletRequest request) {
-        WxMpTemplateMessage orderPaySuccessTemplate = new WxMpTemplateMessage();
+        WxMpTemplateMessage orderPaySuccessTemplate = WxMpTemplateMessage.builder().build();
         orderPaySuccessTemplate.setToUser(request.getParameter("openid"));
         orderPaySuccessTemplate.setTemplateId("ENp7UwpOtlhvieebUvDm0mK4n0hTvbH0Me83HdBUvC0");
         orderPaySuccessTemplate.setUrl(request.getParameter("url"));
@@ -55,7 +55,7 @@ public class TemplateMessageController extends GenericController {
     @RequestMapping(value = "notifyOrderStatusUpdateTemplate")
     public void notifyOrderStatusUpdateTemplate(HttpServletResponse response,
                                                 HttpServletRequest request) {
-        WxMpTemplateMessage orderPaySuccessTemplate = new WxMpTemplateMessage();
+        WxMpTemplateMessage orderPaySuccessTemplate = WxMpTemplateMessage.builder().build();
         orderPaySuccessTemplate.setToUser(request.getParameter("openid"));
         orderPaySuccessTemplate.setTemplateId("X8ccwRF4EAx7VHFQGzi78Gl0C3GcpGpYgWk-HFFOWA0");
         orderPaySuccessTemplate.setUrl(request.getParameter("url"));

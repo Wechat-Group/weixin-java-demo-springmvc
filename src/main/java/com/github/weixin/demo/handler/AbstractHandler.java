@@ -1,4 +1,4 @@
-package com.github.handler;
+package com.github.weixin.demo.handler;
 
 import com.google.gson.Gson;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;

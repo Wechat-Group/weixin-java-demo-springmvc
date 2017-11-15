@@ -1,4 +1,4 @@
-package com.github.config;
+package com.github.weixin.demo.config;
 
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;

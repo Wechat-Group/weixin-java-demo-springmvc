@@ -1,4 +1,4 @@
-package com.github.util;
+package com.github.weixin.demo.util;
 
 import java.security.MessageDigest;
 import java.util.Iterator;

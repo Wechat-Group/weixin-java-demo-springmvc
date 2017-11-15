@@ -1,6 +1,5 @@
-package com.github.config;
+package com.github.weixin.demo.config;
 
-import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -8,6 +7,8 @@ import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+
+import static me.chanjar.weixin.common.api.WxConsts.MenuButtonType;
 
 /**
  * Created by FirenzesEagle on 2016/6/1 0001.
@@ -27,7 +28,7 @@ public class MenuConfig {
 
 		WxMenu menu = new WxMenu();
 		WxMenuButton button1 = new WxMenuButton();
-		button1.setType(WxConsts.BUTTON_VIEW);
+		button1.setType(MenuButtonType.VIEW);
 		button1.setName("买家订单");
 		button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
@@ -35,22 +36,22 @@ public class MenuConfig {
 		button2.setName("我是卖家");
 
 		WxMenuButton button21 = new WxMenuButton();
-		button21.setType(WxConsts.BUTTON_VIEW);
+		button21.setType(MenuButtonType.VIEW);
 		button21.setName("我的订单");
 		button21.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
 		WxMenuButton button22 = new WxMenuButton();
-		button22.setType(WxConsts.BUTTON_VIEW);
+		button22.setType(MenuButtonType.VIEW);
 		button22.setName("收入统计");
 		button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
 		WxMenuButton button23 = new WxMenuButton();
-		button23.setType(WxConsts.BUTTON_VIEW);
+		button23.setType(MenuButtonType.VIEW);
 		button23.setName("发布商品");
 		button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
 		WxMenuButton button24 = new WxMenuButton();
-		button24.setType(WxConsts.BUTTON_VIEW);
+		button24.setType(MenuButtonType.VIEW);
 		button24.setName("商品管理");
 		button24.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
@@ -60,7 +61,7 @@ public class MenuConfig {
 		button2.getSubButtons().add(button24);
 
 		WxMenuButton button3 = new WxMenuButton();
-		button3.setType(WxConsts.BUTTON_CLICK);
+		button3.setType(MenuButtonType.CLICK);
 		button3.setName("使用帮助");
 		button3.setKey("help");
 

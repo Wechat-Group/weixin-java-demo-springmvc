@@ -1,9 +1,9 @@
-package com.github.service.impl;
+package com.github.weixin.demo.service.impl;
 
-import com.github.handler.LogHandler;
-import com.github.handler.MsgHandler;
-import com.github.handler.SubscribeHandler;
-import com.github.service.CoreService;
+import com.github.weixin.demo.handler.LogHandler;
+import com.github.weixin.demo.handler.MsgHandler;
+import com.github.weixin.demo.handler.SubscribeHandler;
+import com.github.weixin.demo.service.CoreService;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
@@ -101,8 +101,8 @@ public class CoreServiceImpl implements CoreService {
         // 记录所有事件的日志
         newRouter.rule().handler(this.logHandler).next();
         // 关注事件
-        newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-            .event(WxConsts.EVT_SUBSCRIBE).handler(this.subscribeHandler)
+        newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
+            .event(WxConsts.EventType.SUBSCRIBE).handler(this.subscribeHandler)
                 .end();
         // 默认,转发消息给客服人员
         newRouter.rule().async(false).handler(this.msgHandler).end();

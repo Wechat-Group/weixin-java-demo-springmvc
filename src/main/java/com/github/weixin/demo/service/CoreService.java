@@ -1,4 +1,4 @@
-package com.github.service;
+package com.github.weixin.demo.service;
 
 import java.io.IOException;
 import java.util.List;
