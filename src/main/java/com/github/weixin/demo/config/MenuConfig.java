@@ -113,7 +113,7 @@ public class MenuConfig {
 	}
 
 	/**
-	 * 运行此main函数即可生成公众号自定义菜单
+	 * 运行此main函数即可生成公众号自定义菜单，注意要修改MainConfig构造方法行代码的对应四个参数为实际值
 	 *
 	 * @param args
 	 */
