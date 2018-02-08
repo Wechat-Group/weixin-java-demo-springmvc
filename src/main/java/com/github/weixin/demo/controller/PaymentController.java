@@ -1,8 +1,16 @@
 package com.github.weixin.demo.controller;
 
-import com.github.binarywang.wxpay.bean.request.WxEntPayRequest;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.github.binarywang.wxpay.bean.entpay.EntPayRequest;
+import com.github.binarywang.wxpay.bean.entpay.EntPayResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
-import com.github.binarywang.wxpay.bean.result.WxEntPayResult;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -13,13 +21,6 @@ import com.github.weixin.demo.util.Sha1Util;
 import com.github.weixin.demo.util.XMLUtil;
 import com.google.gson.Gson;
 import me.chanjar.weixin.common.exception.WxErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * 微信支付Controller
@@ -53,7 +54,7 @@ public class PaymentController extends GenericController {
       .body(request.getParameter("body"))
       .tradeType(request.getParameter("trade_type"))
       .spbillCreateIp(request.getParameter("spbill_create_ip"))
-      .notifyURL("")
+      .notifyUrl("")
       .build();
     this.logger
       .info("PartnerKey is :" + this.payConfig.getMchKey());
@@ -79,7 +80,7 @@ public class PaymentController extends GenericController {
       .body(request.getParameter("body"))
       .tradeType(request.getParameter("trade_type"))
       .spbillCreateIp(request.getParameter("spbill_create_ip"))
-      .notifyURL("")//TODO(user) 填写通知回调地址
+      .notifyUrl("// TODO 填写通知回调地址")
       .build();
 
     try {
@@ -133,7 +134,7 @@ public class PaymentController extends GenericController {
   @RequestMapping(value = "entPay")
   public void payToIndividual(HttpServletResponse response,
                               HttpServletRequest request) {
-    WxEntPayRequest wxEntPayRequest = new WxEntPayRequest();
+    EntPayRequest wxEntPayRequest = new EntPayRequest();
     wxEntPayRequest.setAppid(payConfig.getAppId());
     wxEntPayRequest.setMchId(payConfig.getMchId());
     wxEntPayRequest.setNonceStr(Sha1Util.getNonceStr());
@@ -145,7 +146,7 @@ public class PaymentController extends GenericController {
     wxEntPayRequest.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
 
     try {
-      WxEntPayResult wxEntPayResult = payService.entPay(wxEntPayRequest);
+      EntPayResult wxEntPayResult = payService.getEntPayService().entPay(wxEntPayRequest);
       if ("SUCCESS".equals(wxEntPayResult.getResultCode().toUpperCase())
         && "SUCCESS".equals(wxEntPayResult.getReturnCode().toUpperCase())) {
         this.logger.info("企业对个人付款成功！\n付款信息：\n" + wxEntPayResult.toString());
