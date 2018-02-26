@@ -1,16 +1,17 @@
 package com.github.weixin.demo.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 模板消息Controller
@@ -40,10 +41,10 @@ public class TemplateMessageController extends GenericController {
         WxMpTemplateData orderMoneySumData = new WxMpTemplateData("orderMoneySum", request.getParameter("orderMoneySum"), TEMPLATE_FRONT_COLOR);
         WxMpTemplateData orderProductNameData = new WxMpTemplateData("orderProductName", request.getParameter("orderProductName"), TEMPLATE_FRONT_COLOR);
         WxMpTemplateData remarkData = new WxMpTemplateData("Remark", request.getParameter("remark"), TEMPLATE_FRONT_COLOR);
-        orderPaySuccessTemplate.addWxMpTemplateData(firstData);
-        orderPaySuccessTemplate.addWxMpTemplateData(orderMoneySumData);
-        orderPaySuccessTemplate.addWxMpTemplateData(orderProductNameData);
-        orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
+        orderPaySuccessTemplate.addData(firstData)
+            .addData(orderMoneySumData)
+            .addData(orderProductNameData)
+            .addData(remarkData);
         try {
             wxMpService.getTemplateMsgService()
                 .sendTemplateMsg(orderPaySuccessTemplate);
@@ -63,10 +64,10 @@ public class TemplateMessageController extends GenericController {
         WxMpTemplateData orderMoneySumData = new WxMpTemplateData("OrderSn", request.getParameter("OrderSn"), TEMPLATE_FRONT_COLOR);
         WxMpTemplateData orderProductNameData = new WxMpTemplateData("OrderStatus", request.getParameter("OrderStatus"), TEMPLATE_FRONT_COLOR);
         WxMpTemplateData remarkData = new WxMpTemplateData("remark", request.getParameter("remark"), TEMPLATE_FRONT_COLOR);
-        orderPaySuccessTemplate.addWxMpTemplateData(firstData);
-        orderPaySuccessTemplate.addWxMpTemplateData(orderMoneySumData);
-        orderPaySuccessTemplate.addWxMpTemplateData(orderProductNameData);
-        orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
+        orderPaySuccessTemplate.addData(firstData)
+            .addData(orderMoneySumData)
+            .addData(orderProductNameData)
+            .addData(remarkData);
         try {
             wxMpService.getTemplateMsgService()
                 .sendTemplateMsg(orderPaySuccessTemplate);
