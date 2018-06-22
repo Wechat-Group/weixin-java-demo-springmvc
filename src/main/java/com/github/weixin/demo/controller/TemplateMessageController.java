@@ -3,11 +3,11 @@ package com.github.weixin.demo.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
@@ -49,7 +49,7 @@ public class TemplateMessageController extends GenericController {
             wxMpService.getTemplateMsgService()
                 .sendTemplateMsg(orderPaySuccessTemplate);
         } catch (WxErrorException e) {
-            logger.error(e.getMessage().toString());
+            logger.error(e.getMessage());
         }
     }
 
@@ -72,7 +72,7 @@ public class TemplateMessageController extends GenericController {
             wxMpService.getTemplateMsgService()
                 .sendTemplateMsg(orderPaySuccessTemplate);
         } catch (WxErrorException e) {
-            logger.error(e.getMessage().toString());
+            logger.error(e.getMessage());
         }
     }
 

@@ -5,7 +5,7 @@ import com.github.weixin.demo.handler.MsgHandler;
 import com.github.weixin.demo.handler.SubscribeHandler;
 import com.github.weixin.demo.service.CoreService;
 import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;

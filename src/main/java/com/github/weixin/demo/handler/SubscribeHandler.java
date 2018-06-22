@@ -6,7 +6,6 @@ import com.github.weixin.demo.service.CoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -33,7 +32,8 @@ public class SubscribeHandler extends AbstractHandler {
 
 
     @Override
-    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager sessionManager) throws WxErrorException {
+    public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context,
+                                    WxMpService wxMpService, WxSessionManager sessionManager) {
         WxMpUser wxMpUser = coreService.getUserInfo(wxMessage.getFromUser(), "zh_CN");
         /*List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("openId", wxMpUser.getOpenId()));
@@ -51,4 +51,4 @@ public class SubscribeHandler extends AbstractHandler {
         logger.info("subscribeMessageHandler" + m.getContent());
         return m;
     }
-};
+}

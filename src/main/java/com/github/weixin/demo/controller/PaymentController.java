@@ -20,7 +20,6 @@ import com.github.weixin.demo.util.ReturnModel;
 import com.github.weixin.demo.util.Sha1Util;
 import com.github.weixin.demo.util.XMLUtil;
 import com.google.gson.Gson;
-import me.chanjar.weixin.common.exception.WxErrorException;
 
 /**
  * 微信支付Controller
@@ -42,11 +41,10 @@ public class PaymentController extends GenericController {
    *
    * @param response
    * @param request
-   * @throws WxErrorException
    */
   @RequestMapping(value = "getPrepayIdResult")
   public void getPrepayId(HttpServletResponse response,
-                          HttpServletRequest request) throws WxErrorException, WxPayException {
+                          HttpServletRequest request) throws WxPayException {
     WxPayUnifiedOrderRequest payInfo = WxPayUnifiedOrderRequest.newBuilder()
       .openid(request.getParameter("openid"))
       .outTradeNo(request.getParameter("out_trade_no"))
