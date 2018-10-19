@@ -21,7 +21,7 @@
         <weixin-java-tools.version>3.2.0</weixin-java-tools.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <spring.version>4.2.6.RELEASE</spring.version>
+        <spring.version>4.3.18.RELEASE</spring.version>
         <freemarker.version>2.3.23</freemarker.version>
         <commons.fileupload.version>1.3.1</commons.fileupload.version>
         <commons.codec.version>1.9</commons.codec.version>
