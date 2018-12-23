@@ -4,9 +4,9 @@
 ----
 [![Build Status](https://travis-ci.org/Wechat-Group/weixin-java-tools-springmvc.svg?branch=master)](https://travis-ci.org/Wechat-Group/weixin-java-tools-springmvc)
 
-This repository is a wechat springmvc demo based on **weixin-java-tools**
+This repository is a wechat springmvc demo based on **WxJava**
 
-本仓库的项目是一个基于**weixin-java-tools**的springmvc Demo
+本仓库的项目是一个基于**WxJava**的springmvc Demo
 
 
 

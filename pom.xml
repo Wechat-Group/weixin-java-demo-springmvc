@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.firenzeseagle</groupId>
-    <artifactId>weixin-java-tools-springmvc</artifactId>
+    <artifactId>WxJava-springmvc</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <properties>
@@ -18,7 +18,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <weixin-java-tools.version>3.2.0</weixin-java-tools.version>
+        <WxJava.version>3.3.0</WxJava.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>4.3.18.RELEASE</spring.version>
@@ -120,13 +120,13 @@
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
-            <version>${weixin-java-tools.version}</version>
+            <version>${WxJava.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-pay</artifactId>
-            <version>${weixin-java-tools.version}</version>
+            <version>${WxJava.version}</version>
         </dependency>
 
         <!-- junit -->
