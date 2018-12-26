@@ -8,8 +8,9 @@
 
 This repository is a wechat springmvc demo based on **WxJava**
 
-本仓库的项目是一个基 于**WxJava** 的springmvc Demo
+本仓库的项目是一个基 于**[WxJava](https://github.com/wechat-group/WxJava)** 的springmvc Demo.
 
+新手遇到问题，请务必先阅读[【开发文档首页】](https://github.com/Wechat-Group/WxJava/wiki)的常见问题部分，可以少走很多弯路，节省不少时间。
 
 
 ## 本项目目前实现了如下功能：
