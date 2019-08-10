@@ -33,7 +33,7 @@ Welcome to Pull Requests!
 
 **将项目下载到本地**
 ```shell
-git clone https://github.com/wechat-group/weixin-java-tools-springmvc
+git clone https://github.com/wechat-group/weixin-java-demo-springmvc
 ```
 
 **配置公众号信息**
