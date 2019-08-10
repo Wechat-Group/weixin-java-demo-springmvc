@@ -11,7 +11,7 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 
 /**
  * 对所有接收到的消息输出日志，也可进行持久化处理
- *
+ * <p>
  * Created by FirenzesEagle on 2016/7/27 0027.
  * Email:liumingbo2008@gmail.com
  */

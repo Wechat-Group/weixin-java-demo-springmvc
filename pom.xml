@@ -18,7 +18,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <WxJava.version>3.4.0</WxJava.version>
+        <WxJava.version>3.5.0</WxJava.version>
         <junit.version>4.12</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>4.3.18.RELEASE</spring.version>
@@ -52,66 +52,6 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-          <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${plugin.checkstyle.version}</version>
-                <configuration>
-                    <configLocation>${project.basedir}/build/check-style.xml</configLocation>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <suppressionsLocation>${project.basedir}/build/check-style-suppression.xml</suppressionsLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${plugin.pmd.version}</version>
-                <configuration>
-                    <rulesets>
-                        <ruleset>build/pmd.xml</ruleset>
-                    </rulesets>
-                    <targetJdk>${project.build.jdk}</targetJdk>
-                    <verbose>true</verbose>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                            <goal>cpd-check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>${plugin.findbugs.version}</version>
-                <configuration>
-                    <excludeFilterFile>build/find-bugs-exclude-filter.xml</excludeFilterFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
         </plugins>
     </build>
 

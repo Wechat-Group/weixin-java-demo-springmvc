@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 消息处理Handler的父类
- *
+ * <p>
  * Created by FirenzesEagle on 2016/7/27 0027.
  * Email:liumingbo2008@gmail.com
  */

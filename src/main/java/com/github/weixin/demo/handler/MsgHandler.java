@@ -12,7 +12,7 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 
 /**
  * 转发客户消息给客服Handler
- *
+ * <p>
  * Created by FirenzesEagle on 2016/7/27 0027.
  * Email:liumingbo2008@gmail.com
  */
@@ -22,7 +22,7 @@ public class MsgHandler extends AbstractHandler {
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage, Map<String, Object> context, WxMpService wxMpService,
                                     WxSessionManager sessionManager) {
         return WxMpXmlOutMessage
-                .TRANSFER_CUSTOMER_SERVICE().fromUser(wxMessage.getToUser())
-                .toUser(wxMessage.getFromUser()).build();
+            .TRANSFER_CUSTOMER_SERVICE().fromUser(wxMessage.getToUser())
+            .toUser(wxMessage.getFromUser()).build();
     }
 }

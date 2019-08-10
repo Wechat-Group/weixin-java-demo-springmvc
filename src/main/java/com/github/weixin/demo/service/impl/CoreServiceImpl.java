@@ -103,7 +103,7 @@ public class CoreServiceImpl implements CoreService {
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
             .event(WxConsts.EventType.SUBSCRIBE).handler(this.subscribeHandler)
-                .end();
+            .end();
         // 默认,转发消息给客服人员
         newRouter.rule().async(false).handler(this.msgHandler).end();
         this.router = newRouter;
