@@ -3,11 +3,11 @@ package com.github.weixin.demo.handler;
 import java.util.Map;
 
 import com.github.weixin.demo.service.CoreService;
+import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import me.chanjar.weixin.common.session.WxSessionManager;
-import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
