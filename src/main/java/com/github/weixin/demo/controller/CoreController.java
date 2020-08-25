@@ -108,7 +108,8 @@ public class CoreController extends GenericController {
      * @param lang   zh_CN, zh_TW, en
      */
     @RequestMapping(value = "/getUserInfo")
-    public WxMpUser getUserInfo(HttpServletResponse response, @RequestParam(value = "openid") String openid, @RequestParam(value = "lang") String lang) {
+    public WxMpUser getUserInfo(HttpServletResponse response, @RequestParam(value = "openid") String openid,
+                                @RequestParam(value = "lang") String lang) {
         ReturnModel returnModel = new ReturnModel();
         WxMpUser wxMpUser = null;
         try {
@@ -133,12 +134,13 @@ public class CoreController extends GenericController {
      * @param lang zh_CN, zh_TW, en
      */
     @RequestMapping(value = "/getOAuth2UserInfo")
-    public void getOAuth2UserInfo(HttpServletResponse response, @RequestParam(value = "code") String code, @RequestParam(value = "lang") String lang) {
+    public void getOAuth2UserInfo(HttpServletResponse response, @RequestParam(value = "code") String code,
+                                  @RequestParam(value = "lang") String lang) {
         ReturnModel returnModel = new ReturnModel();
         WxMpOAuth2AccessToken accessToken;
         WxMpUser wxMpUser;
         try {
-            accessToken = this.wxMpService.oauth2getAccessToken(code);
+            accessToken = this.wxMpService.getOAuth2Service().getAccessToken(code);
             wxMpUser = this.wxMpService.getUserService()
                 .userInfo(accessToken.getOpenId(), lang);
             returnModel.setResult(true);
@@ -163,7 +165,7 @@ public class CoreController extends GenericController {
         ReturnModel returnModel = new ReturnModel();
         WxMpOAuth2AccessToken accessToken;
         try {
-            accessToken = this.wxMpService.oauth2getAccessToken(code);
+            accessToken = this.wxMpService.getOAuth2Service().getAccessToken(code);
             returnModel.setResult(true);
             returnModel.setDatum(accessToken.getOpenId());
             renderString(response, returnModel);
