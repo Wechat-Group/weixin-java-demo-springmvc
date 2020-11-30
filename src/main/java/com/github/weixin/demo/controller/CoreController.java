@@ -3,6 +3,7 @@ package com.github.weixin.demo.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,6 @@ import com.github.weixin.demo.util.ReturnModel;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 /**
@@ -137,7 +137,7 @@ public class CoreController extends GenericController {
     public void getOAuth2UserInfo(HttpServletResponse response, @RequestParam(value = "code") String code,
                                   @RequestParam(value = "lang") String lang) {
         ReturnModel returnModel = new ReturnModel();
-        WxMpOAuth2AccessToken accessToken;
+        WxOAuth2AccessToken accessToken;
         WxMpUser wxMpUser;
         try {
             accessToken = this.wxMpService.getOAuth2Service().getAccessToken(code);
@@ -163,7 +163,7 @@ public class CoreController extends GenericController {
     @RequestMapping(value = "/getOpenid")
     public void getOpenid(HttpServletResponse response, @RequestParam(value = "code") String code) {
         ReturnModel returnModel = new ReturnModel();
-        WxMpOAuth2AccessToken accessToken;
+        WxOAuth2AccessToken accessToken;
         try {
             accessToken = this.wxMpService.getOAuth2Service().getAccessToken(code);
             returnModel.setResult(true);
