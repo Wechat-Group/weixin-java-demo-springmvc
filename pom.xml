@@ -18,7 +18,7 @@
         <plugin.maven-compiler>3.1</plugin.maven-compiler>
 
         <!-- lib versions -->
-        <WxJava.version>4.2.0</WxJava.version>
+        <WxJava.version>4.3.0</WxJava.version>
         <junit.version>4.13.1</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
         <spring.version>5.3.18</spring.version>
