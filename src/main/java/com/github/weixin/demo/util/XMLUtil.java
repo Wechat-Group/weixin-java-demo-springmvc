@@ -23,7 +23,7 @@ public class XMLUtil {
      * 将微信服务器发送的Request请求中Body的XML解析为Map
      *
      * @param request
-     * @return
+     * @return .
      * @throws Exception
      */
     public static Map<String, String> parseRequestXmlToMap(HttpServletRequest request) throws Exception {
@@ -38,7 +38,7 @@ public class XMLUtil {
      * 将输入流中的XML解析为Map
      *
      * @param inputStream
-     * @return
+     * @return .
      * @throws DocumentException
      * @throws IOException
      */
@@ -65,7 +65,7 @@ public class XMLUtil {
      * 将String类型的XML解析为Map
      *
      * @param str
-     * @return
+     * @return .
      * @throws Exception
      */
     public static Map<String, String> parseXmlStringToMap(String str) throws Exception {
