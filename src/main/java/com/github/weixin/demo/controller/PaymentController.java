@@ -54,10 +54,10 @@ public class PaymentController extends GenericController {
             .spbillCreateIp(request.getParameter("spbill_create_ip"))
             .notifyUrl("")
             .build();
-        this.logger
+        log
             .info("PartnerKey is :" + this.payConfig.getMchKey());
         WxPayUnifiedOrderResult result = this.payService.unifiedOrder(payInfo);
-        this.logger.info(new Gson().toJson(result));
+        log.info(new Gson().toJson(result));
         renderString(response, result);
     }
 
@@ -90,7 +90,7 @@ public class PaymentController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getErrCodeDes());
             renderString(response, returnModel);
-            this.logger.error(e.getErrCodeDes());
+            log.error(e.getErrCodeDes());
         }
     }
 
@@ -112,7 +112,7 @@ public class PaymentController extends GenericController {
                         logger.info("out_trade_no: " + kvm.get("out_trade_no") + " pay SUCCESS!");
                         response.getWriter().write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[ok]]></return_msg></xml>");
                     } else {
-                        this.logger.error("out_trade_no: "
+                        log.error("out_trade_no: "
                             + kvm.get("out_trade_no") + " result_code is FAIL");
                         response.getWriter().write(
                             "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
@@ -120,7 +120,7 @@ public class PaymentController extends GenericController {
                 } else {
                     response.getWriter().write(
                         "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[check signature FAIL]]></return_msg></xml>");
-                    this.logger.error("out_trade_no: " + kvm.get("out_trade_no")
+                    log.error("out_trade_no: " + kvm.get("out_trade_no")
                         + " check signature FAIL");
                 }
             }
@@ -147,9 +147,9 @@ public class PaymentController extends GenericController {
             EntPayResult wxEntPayResult = payService.getEntPayService().entPay(wxEntPayRequest);
             if ("SUCCESS".equals(wxEntPayResult.getResultCode().toUpperCase())
                 && "SUCCESS".equals(wxEntPayResult.getReturnCode().toUpperCase())) {
-                this.logger.info("企业对个人付款成功！\n付款信息：\n" + wxEntPayResult.toString());
+                log.info("企业对个人付款成功！\n付款信息：\n" + wxEntPayResult.toString());
             } else {
-                this.logger.error("err_code: " + wxEntPayResult.getErrCode()
+                log.error("err_code: " + wxEntPayResult.getErrCode()
                     + "  err_code_des: " + wxEntPayResult.getErrCodeDes());
             }
         } catch (Exception e) {

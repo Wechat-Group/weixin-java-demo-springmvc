@@ -114,7 +114,7 @@ public class CoreServiceImpl implements CoreService {
         try {
             return this.router.route(inMessage);
         } catch (Exception e) {
-            this.logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
 
         return null;
@@ -126,7 +126,7 @@ public class CoreServiceImpl implements CoreService {
         try {
             wxMpUser = this.wxMpService.getUserService().userInfo(openid, lang);
         } catch (WxErrorException e) {
-            this.logger.error(e.getError().toString());
+            log.error(e.getError().toString());
         }
         return wxMpUser;
     }

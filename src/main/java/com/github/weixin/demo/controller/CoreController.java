@@ -86,7 +86,7 @@ public class CoreController extends GenericController {
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
                 request.getInputStream(), this.configStorage, timestamp, nonce,
                 msgSignature);
-            this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+            log.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
             WxMpXmlOutMessage outMessage = this.coreService.route(inMessage);
             if (outMessage == null) {
                 response.getWriter().write("");
@@ -121,7 +121,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            this.logger.error(e.getError().toString());
+            log.error(e.getError().toString());
         }
         return wxMpUser;
     }
@@ -150,7 +150,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            this.logger.error(e.getError().toString());
+            log.error(e.getError().toString());
         }
     }
 
@@ -173,7 +173,7 @@ public class CoreController extends GenericController {
             returnModel.setResult(false);
             returnModel.setReason(e.getError().toString());
             renderString(response, returnModel);
-            this.logger.error(e.getError().toString());
+            log.error(e.getError().toString());
         }
     }
 
