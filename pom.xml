@@ -21,7 +21,7 @@
         <WxJava.version>4.7.0</WxJava.version>
         <junit.version>4.13.1</junit.version>
         <slf4j.version>1.7.21</slf4j.version>
-        <spring.version>6.1.14</spring.version>
+        <spring.version>6.1.21</spring.version>
         <freemarker.version>2.3.23</freemarker.version>
         <commons.fileupload.version>1.6.0</commons.fileupload.version>
         <commons.codec.version>1.9</commons.codec.version>
